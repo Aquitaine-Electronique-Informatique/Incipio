@@ -317,7 +317,7 @@ class EtudeController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_CA')")
      * @Route(name="project_etude_supprimer", path="/suivi/etude/supprimer/{nom}", methods={"GET","HEAD","POST"})
      *
      * @param Etude                  $etude
