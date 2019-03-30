@@ -31,6 +31,10 @@
             <th>{{ 'prospect.champs.type'|trans({}, 'personne') }}</th>
             <th>{{ 'prospect.champs.adresse'|trans({}, 'personne') }}</th>
             <th>{{ 'prospect.champs.nombre_employe'|trans({}, 'personne') }}</th>
+            <th>{{ 'prospect.champs.direct'|trans({}, 'personne') }}</th>
+            <th>{{ 'prospect.champs.chaud'|trans({}, 'personne') }}</th>
+            <th>{{ 'prospect.champs.date_rencontre'|trans({}, 'personne') }}</th>
+            <th>{{ 'prospect.champs.interet'|trans({}, 'personne') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -40,7 +44,12 @@
                 </td>
                 <td>{{ prospect.entiteToString }}</td>
                 <td>{{ prospect.ville }}, {{ prospect.adresse }}</td>
-                <td>{{ prospect.employes | length }}</td>
+                <td>{{ prospect.emplo
+                <td>{% if prospect.direct %} ✔ {% else %} ❌ {% endif %}</td>
+                <td>{% if prospect.chaud %} ✔ {% else %} ❌ {% endif %}</td>
+                <td>{{ prospect.date_rencontre }}</td>
+                <td>{{ prospect.interet }}</td>
+es | length }}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -147,6 +147,10 @@ prospect:
     nom: Nom
     nombre_employe: Nombre d'employés
     type: Type de prospect
+    direct: Direct
+    chaud: Chaud
+    date_rencontre: Rencontre
+    interet: Interêt
   commentaires: Commentaires
   confirmation_supprimer_prospect: Etes-vous sûr de vouloir supprimer définitivement ce prospect ?
   description_liste_diffusion: Liste des mails valides, abonnés à la newsletter

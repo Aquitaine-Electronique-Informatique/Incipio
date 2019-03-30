@@ -65,6 +65,34 @@ class Prospect extends Adressable
     private $entite;
 
     /**
+    * @var bool
+    *
+    * @ORM\Column(name="chaud", type="boolean", options={"default" : true})
+    */
+    private $chaud;
+
+    /**
+    * @var bool
+    *
+    * @ORM\Column(name="direct", type="boolean", options={"default" : true})
+    */
+    private $direct;
+
+    /**
+    * @Assert\DateTime
+    *
+    * @ORM\Column(name="date_rencontre", type="date", nullable=true)
+    */
+    private $date_rencontre;
+
+    /**
+    * @var int
+    *
+    * @ORM\Column(name="interet", type="integer", nullable=true)
+    */
+    private $interet;
+
+    /**
      * Get id.
      *
      * @return int
@@ -237,4 +265,90 @@ class Prospect extends Adressable
 
         return $tab[$this->entite];
     }
+
+    /**
+     * Renvoie si le prospect est "chaud" ou "froid"
+     *
+     * @return bool
+      */
+    public function getChaud(){
+        return $this->chaud;
+    }
+
+    /**
+     * Set le champ "chaud".
+     *
+     * @param bool $chaud
+     * @return bool
+      */
+    public function setChaud($chaud){
+        $this->chaud = $chaud;
+
+        return $this;
+    }
+
+    /**
+     * Renvoie si le prospect est "direct" ou "indirect"
+     *
+     * @return bool
+      */
+    public function getDirect(){
+        return $this->direct;
+    }
+
+    /**
+     *  Set le champ "direct".
+     *
+     *  @param boolean $direct
+     *
+     *  @return bool
+      */
+    public function setDirect($direct){
+        $this->direct = $direct;
+
+        return $this;
+    }
+
+    /**
+     * Get "date_rencontre".
+     *
+     *  @return DateTime
+     */
+    public function getDateRencontre(){
+        return $this->date_rencontre;
+    }
+
+    /**
+     * Set "date_rencontre".
+     *
+     * @param DateTime $date
+     *
+     * @return Prospect
+     */
+    public function setDateRencontre($date){
+        $this->date_rencontre = $date;
+
+        return $this;
+    }
+
+    /**
+     *  Get "interet"
+     *
+     *  @return int
+     */
+    public function getInteret(){
+        return $this->interet;
+    }
+
+    /**
+     *  Set "interet" between 0 and 5
+     *
+     *  @param int $interet
+     *  @return Prospect
+     */
+    public function setInteret($interet){
+        $this->interet = $interet;
+        return $this;
+    }
+
 }

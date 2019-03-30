@@ -30,7 +30,11 @@ class ProspectType extends AbstractType
             ->add('adresse', TextareaType::class, ['required' => false])
             ->add('codepostal', TextType::class, ['required' => false, 'attr' => ['placeholder' => 'Code Postal']])
             ->add('ville', TextType::class, ['required' => false, 'attr' => ['placeholder' => 'Ville']])
-            ->add('pays', TextType::class, ['required' => false, 'attr' => ['placeholder' => 'Pays']]);
+            ->add('pays', TextType::class, ['required' => false, 'attr' => ['placeholder' => 'Pays']])
+            ->add('chaud', CheckboxType::class, ['required' => false, 'attr' => ['placeholder' => 'Chaud']])
+            ->add('direct', CheckboxType::class, ['required' => false, 'attr' => ['placeholder' => 'Direct']])
+            ->add('interet', ChoiceType::class, ['choices' => array([1,2,3,4,5]),'required' => false, 'attr' => ['placeholder' => 'Interêt']])
+            ->add('date_rencontre', DateType::class, ['required' => false, 'attr' => ['placeholder' => 'Date De Rencontre']]);
     }
 
     public function getBlockPrefix()
