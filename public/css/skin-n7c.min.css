@@ -1,19 +1,13 @@
 .skin-yellow .main-header .navbar {
-    background-color: #f39c12;
+    background-color: #f31212;
 }
-.skin-yellow .main-header .navbar .nav>li>a, .skin-yellow .main-header .navbar .nav>li>.loading {
+.skin-yellow .main-header .navbar .nav>li>a {
     color: #fff;
 }
 .skin-yellow .main-header .navbar .nav>li>a:hover, .skin-yellow .main-header .navbar .nav>li>a:active, .skin-yellow .main-header .navbar .nav>li>a:focus, .skin-yellow .main-header .navbar .nav .open>a, .skin-yellow .main-header .navbar .nav .open>a:hover, .skin-yellow .main-header .navbar .nav .open>a:focus {
     background: rgba(0, 0, 0, 0.1);
     color: #f6f6f6;
 }
-.skin-yellow .main-header .navbar .nav>li>.loading {
-    padding: 10.5px;
-}
-.skin-yellow .main-header .navbar .nav>li>ul>.header {
-    padding-left: 10px;
-}
 .skin-yellow .main-header .navbar .sidebar-toggle {
     color: #fff;
 }
@@ -25,7 +19,7 @@
     color: #fff;
 }
 .skin-yellow .main-header .navbar .sidebar-toggle:hover {
-    background-color: #e08e0b;
+    background-color: #e00b0b;
 }
 @media (max-width:767px) {
     .skin-yellow .main-header .navbar .dropdown-menu li.divider {
@@ -33,18 +27,18 @@
     }
 
     .skin-yellow .main-header .navbar .dropdown-menu li a:hover {
-        background: #e08e0b;
+        background: #e00b0b;
     }
 }.skin-yellow .main-header .logo {
-     background-color: #e08e0b;
+     background-color: #e00b0b;
      color: #fff;
      border-bottom: 0 solid transparent;
  }
 .skin-yellow .main-header .logo:hover {
-    background-color: #db8b0b;
+    background-color: #e00b0b;
 }
 .skin-yellow .main-header li.user-header {
-    background-color: #f39c12;
+    background-color: #e00b0b;
 }
 .skin-yellow .content-header {
     background: transparent;
@@ -65,7 +59,7 @@
 .skin-yellow .sidebar-menu>li:hover>a, .skin-yellow .sidebar-menu>li.active>a {
     color: #fff;
     background: #1e282c;
-    border-left-color: #f39c12;
+    border-left-color: #e00b0b;
 }
 .skin-yellow .sidebar-menu>li>.treeview-menu {
     margin: 0 1px;
@@ -125,24 +119,8 @@
 .sidebar-collapse .sidebar-menu > li > a > .icon-mini {
     display: inline;
 }
-.nav-tabs-custom > .nav-tabs > li > a >.badge{
-    display: none;
-}
-.nav-tabs-custom > .nav-tabs > li.active > a >.badge{
-    display: -moz-inline-box;
-    font-size: 11px;
-}
+
 .breadcrumb{background-color: #f8f8f8;}
-
-.btn-group .dropdown-menu {  
- float: right;
- left: auto;
- right: 0;  
-}
-
-.navbar-header .brand h4{
-    margin: 15px;
-}
 
 /* From Bootstrap 2.3.* removed in 3. @from Mgate.css* */
 .label-important,
