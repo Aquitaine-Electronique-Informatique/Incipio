@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SuiviController extends AbstractController
 {
     /**
-     * @Security("has_role('ROLE_CA')")
+     * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="project_suivi_index", path="/suivi/suivi", methods={"GET","HEAD"})
      */
     public function index()
@@ -47,7 +47,7 @@ class SuiviController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_CA')")
+     * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="project_suivi_ajouter", path="/suivi/suivi/ajouter/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request
@@ -93,7 +93,7 @@ class SuiviController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_CA')")
+     * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="project_suivi_voir", path="/suivi/suivi/voir/{id}", methods={"GET","HEAD"})
      *
      * @param Suivi $suivi
@@ -114,7 +114,7 @@ class SuiviController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_CA')")
+     * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="project_suivi_modifier", path="/suivi/suivi/modifier/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request $request

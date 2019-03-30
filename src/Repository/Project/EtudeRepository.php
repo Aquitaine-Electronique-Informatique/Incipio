@@ -79,6 +79,27 @@ class EtudeRepository extends EntityRepository
         return $query->getResult();
     }
 
+
+    /** Get all projects according to the specified state. Useful to display stats in Dashboard.
+     *
+     * @param int $state
+     *
+     * @return array
+     */
+    public function getByState($state)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('e')
+            ->from('MgateSuiviBundle:Etude', 'e')
+            ->where('e.stateID= :state')
+            ->setParameter('state', $state);
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+
     /**
      * Requete spéciale pour afficher le pipeline des études.
      * A permis de réduire le nombre de requetes de 109 à 34.

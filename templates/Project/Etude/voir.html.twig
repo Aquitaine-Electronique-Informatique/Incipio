@@ -10,9 +10,7 @@
             <li class="active"><a href="#tab1" data-toggle="tab">{{ 'suivi.recapitulatif'|trans({}, 'project') }}</a></li>
             <li><a href="#tab2" data-toggle="tab">{{ 'suivi.phases'|trans({}, 'project') }}</a></li>
             <li><a href="#tab3" data-toggle="tab">{{ 'suivi.redaction_generation'|trans({}, 'project') }}</a></li>
-            {% if is_granted('ROLE_CA') %}
-                <li><a href="#tab4" data-toggle="tab">{{ 'suivi.suivi'|trans({}, 'project') }}</a></li>
-            {% endif %}
+            <li><a href="#tab4" data-toggle="tab">{{ 'suivi.suivi'|trans({}, 'project') }}</a></li>
             <li><a href="#tab5" data-toggle="tab">{{ 'suivi.document'|trans({}, 'project') }}</a></li>
             <li><a href="#tab6" data-toggle="tab">{{ 'suivi.commentaries'|trans({}, 'project') }}</a></li>
         </ul>
@@ -30,16 +28,14 @@
             <div class="tab-pane" id="tab2" style="min-height:200px;">
                 {% include "Project/Etude/TabVoir/Phases.html.twig" with  {'etude':  etude} %}
             </div>
-            <!-- SUIVI -->
+            <!-- REDACTION -->
             <div class="tab-pane" id="tab3">
                 {% include "Project/Etude/TabVoir/Redaction.html.twig" with  {'etude':  etude} %}
             </div>
             <!-- SUIVI DOCUMENTS TYPES AUDIT -->
-            {% if is_granted('ROLE_CA') %}
-                <div class="tab-pane" id="tab4">
-                    {% include "Project/Etude/TabVoir/Suivi.html.twig" with  {'etude':  etude} %}
-                </div>
-            {% endif %}
+            <div class="tab-pane" id="tab4">
+                {% include "Project/Etude/TabVoir/Suivi.html.twig" with  {'etude':  etude} %}
+            </div>
             <!-- SUIVI DOCUMENTS TYPES AUDIT -->
             <div class="tab-pane" id="tab5">
                 {% include "Project/Etude/TabVoir/Documents.html.twig" with  {'etude':  etude} %}
