@@ -46,6 +46,11 @@ class Poste
     private $mandats;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Pole")
+     */
+    private $pole;
+
+    /**
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="description", type="string", length=255)
@@ -150,6 +155,30 @@ class Poste
     public function getMandats()
     {
         return $this->mandats;
+    }
+
+    /**
+     * Get pole.
+     *
+     * @return Pole
+     */
+    public function getPole()
+    {
+        return $this->pole;
+    }
+
+    /**
+     * Set pole.
+     *
+     * @param Pole $pole
+     *
+     * @return Poste
+     */
+    public function setPole(Pole $pole)
+    {
+        $this->pole = $pole;
+
+        return $this;
     }
 
     public function __toString()
