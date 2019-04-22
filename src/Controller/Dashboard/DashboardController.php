@@ -38,14 +38,13 @@ class DashboardController extends AbstractController
      */
     public function index()
     {
-        if (!$this->statsStore->exists('expiration') ||
-            ($this->statsStore->exists('expiration') &&
-                intval($this->statsStore->get('expiration')) + self::EXPIRATION < time()
-            )
+        if (
+            !$this->statsStore->exists('expiration') || ($this->statsStore->exists('expiration') &&
+                intval($this->statsStore->get('expiration')) + self::EXPIRATION < time())
         ) {
             $this->updateDashboardStats($this->statsStore);
         }
-        $stats = $this->statsStore->getMultiple(['ca_negociation', 'ca_encours', 'ca_cloture', 'ca_facture', 'ca_paye', 'expiration']);
+        $stats = $this->statsStore->getMultiple(['ca_negociation', 'ca_encours', 'ca_cloture', 'ca_facture', 'ca_paye', 'etudes_en_cours', 'prospects_qualifies', 'expiration']);
 
         return $this->render('Dashboard/Default/index.html.twig', ['stats' => (isset($stats) ? $stats : [])]);
     }
@@ -80,9 +79,14 @@ class DashboardController extends AbstractController
     {
         $etudeRepository = $this->getDoctrine()
             ->getRepository(Etude::class);
+        $prospectsRepository = $this->getDoctrine()->getRepository(Prospect::class);
+
         $statsStore->set('ca_negociation', $etudeRepository->getCaByState(EtudeController::STATE_ID_EN_NEGOCIATION));
         $statsStore->set('ca_encours', $etudeRepository->getCaByState(EtudeController::STATE_ID_EN_COURS));
         $statsStore->set('ca_cloture', $etudeRepository->getCaByState(EtudeController::STATE_ID_TERMINEE, date('Y')));
+
+        $statsStore->set('etudes_en_cours', count($etudeRepository->getByState(EtudeController::STATE_ID_EN_COURS)));
+        $statsStore->set('prospects_qualifies', count($prospectsRepository->findAll()));
 
         $factureRepository = $this->getDoctrine()->getRepository(Facture::class);
         $statsStore->set('ca_facture', $factureRepository->getCAFacture(date('Y')));

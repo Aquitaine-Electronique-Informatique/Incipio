@@ -1,16 +1,36 @@
 <ul class="nav navbar-nav">
-    <li><div class="loading"><i class="fa fa-refresh fa-spin fa-2x"></i></div></li>
-    <li>
-    <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="true"><i class="fa fa-cog"></i></a>
-    <ul class="dropdown-menu" id="dropdown-notification-container">
-        <li class="header">{{ 'dashboard.manuel'|trans({}, 'dashboard') }}</li>
-        <li><a href="http://jeyser-crm.n7consulting.fr/docs"><span class="fa fa-tags"></span> {{ 'dashboard.guide_utilisateur'|trans({}, 'dashboard') }}</a></li>
-        <li class="divider"></li>
-        <li class="header">{{ app.user.username }}</li>
-        <li><a href="{{ path('fos_user_profile_edit') }}"><span class="fa fa-pencil"></span> {{ 'dashboard.pseudo_modifier'|trans({}, 'dashboard') }}</a></li>
-        <li><a href="{{ path('fos_user_change_password') }}"><span class="fa fa-pencil"></span> {{ 'dashboard.motdepasse_modifier'|trans({}, 'dashboard') }}se</a></li>
-        <li class="divider"></li>
-        <li><a href="{{ path('fos_user_security_logout') }}"><span class="fa fa-times"></span> {{ 'dashboard.deconnexion'|trans({}, 'dashboard') }}</a></li>
-    </ul>
+    <li class="dropdown user user-menu">
+        <a aria-expanded="true" class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="fa fa-user"></i>
+            <span>{{ app.user.username }}<i class="caret"></i>
+            </span>
+        </a>
+        <ul class="dropdown-menu">
+            <!-- User image -->
+            <li class="user-header bg-light-blue">
+                <img src="{{ asset('logo_aei.png') }}" class="img-circle" alt="User Image"/>
+                <p>
+                    {{ app.user.getPersonne().getPoste() }}
+                    <small>
+                        du mandat
+                    </small>
+                    {{ app.user.personne.membre.promotion }}
+                </p>
+            </li>
+            <li>
+                <a href="http://jeyser-crm.n7consulting.fr/docs">
+                    <span class="fa fa-tags"></span>
+                    {{ 'dashboard.guide_utilisateur'|trans({}, 'dashboard') }}</a>
+            </li>
+            <!-- Menu Footer-->
+            <li class="user-footer">
+                <div class="pull-left">
+                    <a href="{{ path('fos_user_change_password') }}" class="btn btn-default btn-flat">{{ 'dashboard.motdepasse_modifier'|trans({}, 'dashboard')|raw }}</a>
+                </div>
+                <div class="pull-right">
+                    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-default btn-flat">{{ 'dashboard.deconnexion'|trans({}, 'dashboard') }}</a>
+                </div>
+            </li>
+        </ul>
     </li>
 </ul>

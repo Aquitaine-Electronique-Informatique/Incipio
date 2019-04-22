@@ -1,128 +1,129 @@
 {# Page d'accueil de Jeyser  #}
-
 {% extends "Dashboard/layout.html.twig" %}
 {% block content_bundle %}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
-                <table class="table">
-                    {% if stats is not empty and (is_granted('ROLE_SUIVEUR') or is_granted('ROLE_TRESO')) %}
-                        <tr>
-                            <th>
-                            <span class="badge badge-default" data-toggle="tooltip"
-                                  title="CA potentiel via les études actuellement en négociation">?</span>
-                                CA en négociation
-                            </th>
-                            <td>{{ stats.ca_negociation }} €</td>
-                        </tr>
-                        <tr>
-                            <th>
-                            <span class="badge badge-default" data-toggle="tooltip"
-                                  title="CA potentiel via les études actuellement en cours de réalisation">?</span>
-                                CA en cours
-                            </th>
-                            <td>{{ stats.ca_encours }} €</td>
-                        </tr>
-                        <tr>
-                            <th>
-                            <span class="badge badge-default" data-toggle="tooltip"
-                                  title="CA des études cloturées sur le mandat {{ 'now' | date('Y') }}">?</span>
-                                CA cloturé par le mandat {{ 'now' | date('Y') }}
-                            </th>
-                            <td>{{ stats.ca_cloture }} €</td>
-                        </tr>
-                        <tr>
-                            <th>
-                            <span class="badge badge-default" data-toggle="tooltip"
-                                  title="Somme des factures de vente émises (associées à une étude du mandat {{ 'now' | date('Y') }})">?</span>
-                                CA facturé par le mandat {{ 'now' | date('Y') }}
-                            </th>
-                            <td>{{ stats.ca_facture ? stats.ca_facture : 0 }} €</td>
-                        </tr>
-                        <tr>
-                            <th>
-                            <span class="badge badge-default" data-toggle="tooltip"
-                                  title="Somme des factures de vente payées par le client (associées à une étude du mandat {{ 'now' | date('Y') }})">?</span>
-                                CA payé sur le mandat {{ 'now' | date('Y') }}
-                            </th>
-                            <td>{{ stats.ca_paye ? stats.ca_paye : 0 }} €</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                Stats le {{ stats.expiration|date('d/m/Y H:i') }}
-                            </td>
-                        </tr>
-                    {% endif %}
-                    <tr>
-                        <th>Envoyez vos suggestions à <br><a href="mailto:{{ technical_to }}">{{ technical_to }}</a>
-                        </th>
-                        <td></td>
-                    </tr>
-
-                </table>
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>
+                            {{ stats.etudes_en_cours ? stats.etudes_en_cours : 0}}
+                        </h3>
+                        <p>
+                            Études en cours
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-repeat"></i>
+                    </div>
+                    <a href="{{ path('MgateSuivi_etude_homepage') }}" class="small-box-footer">
+                        Liste des études
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
             </div>
-            <div class="col-md-4 xs-hidden">
-                <!-- One day, maybe, a calendar ... -->
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>
+                            {{ stats.prospects_qualifies ? stats.prospects_qualifies : 0}}
+                        </h3>
+                        <p>
+                            Prospects qualifiés
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-male"></i>
+                    </div>
+                    <a href="{{ path('MgatePersonne_prospect_homepage') }}" class="small-box-footer">
+                        Liste des prospects
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
             </div>
-            <div class="col-md-4">
-                <table class="table">
-                    <tr>
-                        <th colspan="2">Informations</th>
-                    </tr>
-                    <tr>
-                        <td>Connecté en tant que</td>
-                        <th>
-                            {{ app.user.username }}
-                            <a href="{{ path('fos_user_security_logout') }}" class="pull-right">
-                                <i class="fa fa-times"></i> Déconnexion
-                            </a>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>Dernière connexion le</td>
-                        <th>{{ app.user.lastLogin ? app.user.lastLogin | date ('d M Y') }}</th>
-                    </tr>
-                    <tr>
-                        <td>Permissions</td>
-                        <th>
-                            {% for role in app.user.roles %}
-                                <span class="badge badge-default">{{ role }}</span>
-                            {% endfor %}
-                        </th>
-                    </tr>
-                </table>
-                <hr/>
-                <table class="table">
-                    <tr>
-                        <td colspan="2">
-                            <p>
-                                <strong>Vous trouvez Jeyser utile à votre Junior ?</strong><br/>
-                                Encouragez le développement en donnant une étoile sur
-                                <a href="https://github.com/n7consulting/Incipio">Github</a>.<br/>
-                                Ca ne vous coute rien et ça nous fera très plaisir.
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="https://insight.sensiolabs.com/projects/b2a395d1-acaa-4305-a30e-3a326fdb7c3a/big.png"
-                                 title="Qualité du code du projet Jeyser-CRM"/>
-                    </tr>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <tr>
-                            <td colspan="2">
-                                Jeyser <span id="version">3.0.0</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" id="version-info">
-                            </td>
-                        </tr>
-                    {% endif %}
-
-                </table>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>
+                            {{ stats.ca_encours ? stats.ca_encours : 0 }}<sup style="font-size: 20px">&euro;</sup>
+                        </h3>
+                        <p>
+                            CA signé
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-dollar"></i>
+                    </div>
+                    <a href="{{ path('MgateSuivi_etude_homepage') }}" class="small-box-footer">
+                        Liste des études
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>
+                            {{ stats.ca_paye ? stats.ca_paye : 0 }}<sup style="font-size: 20px">&euro;</sup>
+                        </h3>
+                        <p>
+                            CA réalisé
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-dollar"></i>
+                    </div>
+                    <a href="{{ path('MgateSuivi_etude_homepage') }}" class="small-box-footer">
+                        Liste des études
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
+        <!-- /.row -->
+    </div>
+{% endblock %}
+
+{% block calenddar_bundle %}
+    <div class="col-md-12">
+        <!-- The calendar -->
+        <link rel="stylesheet" href="{{ asset('css/fullcalendar.min.css') }}"/>
+        {% block javascript %}
+            {{ parent() }}
+            <script src="{{ asset('js/fullcalendar/lib/jquery.min.js') }}"></script>
+            <script src="{{ asset('js/fullcalendar/lib/jquery-ui.min.js') }}"></script>
+            <script src="{{ asset('js/fullcalendar/lib/moment.min.js') }}"></script>
+            <script src="{{ asset('js/fullcalendar/fullcalendar.min.js') }}"></script>
+            <script src="{{ asset('js/fullcalendar/locale/fr.js') }}"></script>
+            <script src="{{ asset('js/fullcalendar/gcal.js') }}"></script>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#calendar').fullCalendar({
+                        lang: 'fr',
+                        firstDay: 1,
+                        scrollTime: '09:00:00',
+                        defaultView: 'agendaWeek',
+                        header: {
+                            left: 'month, agendaWeek',
+                            center: 'title',
+                            right: 'today, prev, next'
+                        },
+                        height: 600,
+                        googleCalendarApiKey: 'AIzaSyCiadCbab8ERBiZQ6LMCnY_hbe8QTYE-Ww',
+                        events: {
+                            googleCalendarId: 'aeijeeirb@gmail.com'
+                        }
+                    });
+                });
+            </script>
+        {% endblock %}
+        <div id="calendar"></div>
     </div>
 {% endblock %}
 

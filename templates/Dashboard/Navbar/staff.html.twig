@@ -2,47 +2,58 @@
 
 <style>
     .dropdown-menu > li > ul {
-        padding: 3px 20px;
+        padding: 3px 20px !important;
         margin: 0 !important;
         text-align: right !important;
         min-width: 300px;
     }
 </style>
-<form action="{{ path('dashboard_search') }}" method="GET" class="sidebar-form">
+<form action="{{ path('Mgate_dashboard_search') }}" method="GET" class="sidebar-form">
     <div class="input-group">
-        <input type="text" name="q" class="form-control"
-               placeholder="{{ 'dashboard.rechercher'| trans }}">
+        <input type="text" name="q" class="form-control" placeholder="{{ 'dashboard.rechercher'|trans({}, 'dashboard') }}">
         <span class="input-group-btn">
-                <button type="submit" class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
+            <button class="btn btn-flat" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </span>
     </div>
 </form>
 <!-- sidebar menu start-->
-<ul class="sidebar-menu" id="nav-accordion">
+<ul
+    class="sidebar-menu" data-widget="tree" id="nav-accordion">
 
     <!-- GESTION ASSOCIATIVE -->
     {% if is_granted('ROLE_SUIVEUR') %}
 
-        <li>
+        <li class="treeview">
             <a href="#">
                 <i class="icon-mini fa fa-book"></i>
-                <span class="nav-label">{{ 'dashboard.gestion_associative'| trans }}</span>
+                <span class="nav-label">{{ 'dashboard.gestion_associative'|trans({}, 'dashboard') }}</span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li class="dropdown-header">{{ 'dashboard.membres'| trans }}</li>
-                <li><a href="{{ path('personne_membre_homepage') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.membres_lister'| trans }}</a>
+                <li class="dropdown-header">{{ 'dashboard.membres'|trans({}, 'dashboard') }}</li>
+                <li>
+                    <a href="{{ path('MgatePersonne_membre_homepage') }}">
+                        <span class="fa fa-list"></span>
+                        {{ 'dashboard.membres_lister'|trans({}, 'dashboard') }}</a>
                 </li>
-                <li><a href="{{ path('personne_intervenants_homepage') }}"><span
-                                class="fa fa-usd"></span> {{ 'dashboard.intervenants_lister'| trans }}
-                    </a></li>
-                <li><a href="{{ path('personne_membre_impayes') }}"><span
-                                class="fa fa-euro"></span> {{ 'dashboard.impayes_lister'| trans }}</a>
+                <li>
+                    <a href="{{ path('MgatePersonne_intervenants_homepage') }}">
+                        <span class="fa fa-usd"></span>
+                        {{ 'dashboard.intervenants_lister'|trans({}, 'dashboard') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('MgatePersonne_membre_impayes') }}">
+                        <span class="fa fa-euro"></span>
+                        {{ 'dashboard.impayes_lister'|trans({}, 'dashboard') }}</a>
                 </li>
                 <li class="divider"></li>
-                <li><a href="{{ path('personne_membre_ajouter') }}"><span
-                                class="fa fa-plus"></span> {{ 'dashboard.membre_ajouter'| trans }}</a>
+                <li>
+                    <a href="{{ path('MgatePersonne_membre_ajouter') }}">
+                        <span class="fa fa-plus"></span>
+                        {{ 'dashboard.membre_ajouter'|trans({}, 'dashboard') }}</a>
                 </li>
             </ul>
         </li>
@@ -53,7 +64,7 @@
             <a href="{{ path('privacy_homepage') }}">
                 <i class="icon-mini fa fa-user-secret"></i>
                 <span class="nav-label">
-                	{{ 'dashboard.vie_privee'| trans }}
+                    {{ 'dashboard.vie_privee'|trans({}, 'dashboard') }}
                 </span>
             </a>
         </li>
@@ -62,36 +73,47 @@
 
     {% if is_granted('ROLE_SUIVEUR') %}
         <!-- SUIVI D'ETUDES-->
-        <li>
+        <li class="treeview">
             <a href="#">
                 <i class="icon-mini fa fa-calendar"></i>
-                <span class="nav-label">{{ 'dashboard.suivi_etudes'| trans }} </span>
+                <span class="nav-label">{{ 'dashboard.suivi_etudes'|trans({}, 'dashboard') }}
+                </span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a href="{{ path('project_etude_homepage') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.etudes_voir'| trans }}</a></li>
-                <li><a href="{{ path('project_etude_ajouter') }}"><span
-                                class="fa fa-plus"></span> {{ 'dashboard.etude_creer'| trans }}</a></li>
+                <li>
+                    <a href="{{ path('MgateSuivi_etude_homepage') }}">
+                        <span class="fa fa-list"></span>
+                        {{ 'dashboard.etudes_voir'|trans({}, 'dashboard') }}</a>
+                </li>
+                <li>
+                    <a href="{{ path('MgateSuivi_etude_ajouter') }}">
+                        <span class="fa fa-plus"></span>
+                        {{ 'dashboard.etude_creer'|trans({}, 'dashboard') }}</a>
+                </li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Qualité</li>
-                <li><a href="{{ path('project_etude_suiviQualite') }}"><span
-                                class="fa fa-exclamation-triangle"></span> {{ 'dashboard.problemes_suivi'| trans }}
-                    </a></li>
+                <li>
+                    <a href="{{ path('MgateSuivi_etude_suiviQualite') }}">
+                        <span class="fa fa-exclamation-triangle"></span>
+                        {{ 'dashboard.problemes_suivi'|trans({}, 'dashboard') }}
+                    </a>
+                </li>
                 {% if is_granted('ROLE_CA') %}
                     <li class="divider"></li>
-                    <li class="dropdown-header">{{ 'dashboard.administration'| trans }}</li>
+                    <li class="dropdown-header">{{ 'dashboard.administration'|trans({}, 'dashboard') }}</li>
                     <li>
-                        <a href="{{ path('project_clientcontact_index') }}"><span
-                                    class="fa fa-envelope"></span> {{ 'dashboard.contacts_clients'| trans }}
+                        <a href="{{ path('MgateSuivi_clientcontact_index') }}">
+                            <span class="fa fa-envelope"></span>
+                            {{ 'dashboard.contacts_clients'|trans({}, 'dashboard') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('project_vu_ca') }}"><span
-                                    class="fa fa-eye"></span> {{ 'dashboard.vu_ca'| trans }}
-                        </a>
+                        <a href="{{ path('MgateSuivi_vu_ca') }}">
+                            <span class="fa fa-eye"></span>
+                            {{ 'dashboard.vu_ca'|trans({}, 'dashboard') }}</a>
                     </li>
-                    <!--li><a href="{#{ path('project_etude_suivi') }#}"><span class="fa fa-tasks"></span> Récapitulatif</a></li-->
+                    <!--li><a href="{#{ path('MgateSuivi_etude_suivi') }#}"><span class="fa fa-tasks"></span> Récapitulatif</a></li-->
                 {% endif %}
             </ul>
         </li>
@@ -99,33 +121,38 @@
 
     <!-- DEVELOPPEMENT COMMERCIAL -->
     {% if is_granted('ROLE_SUIVEUR') %}
-        <li>
+        <li class="treeview">
             <a href="#">
                 <i class="icon-mini fa fa-address-book"></i>
-                <span class="nav-label">{{ 'dashboard.prospection'| trans }} </span>
+                <span class="nav-label">{{ 'dashboard.prospection'|trans({}, 'dashboard') }}
+                </span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li class="dropdown-header">{{ 'dashboard.prospect_client'| trans }}</li>
+                <li class="dropdown-header">{{ 'dashboard.prospect_client'|trans({}, 'dashboard') }}</li>
                 <li>
-                    <a href="{{ path('personne_prospect_homepage') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.prospects_voir'| trans }}</a>
+                    <a href="{{ path('MgatePersonne_prospect_homepage') }}">
+                        <span class="fa fa-list"></span>
+                        {{ 'dashboard.prospects_voir'|trans({}, 'dashboard') }}</a>
                 </li>
                 <li>
-                    <a href="{{ path('personne_prospect_ajouter') }}"><span
-                                class="fa fa-plus"></span> {{ 'dashboard.prospect_ajouter'| trans }}</a>
+                    <a href="{{ path('MgatePersonne_prospect_ajouter') }}">
+                        <span class="fa fa-plus"></span>
+                        {{ 'dashboard.prospect_ajouter'|trans({}, 'dashboard') }}</a>
                 </li>
                 {% if is_granted('ROLE_CA') %}
                     <li class="divider"></li>
-                    <li class="dropdown-header">{{ 'dashboard.annuaire'| trans }}</li>
+                    <li class="dropdown-header">{{ 'dashboard.annuaire'|trans({}, 'dashboard') }}</li>
                     <li>
-                        <a href="{{ path('personne_annuaire') }}"><span
-                                    class="fa fa-book"></span> {{ 'dashboard.annuaire_global'| trans }}
+                        <a href="{{ path('MgatePersonne_annuaire') }}">
+                            <span class="fa fa-book"></span>
+                            {{ 'dashboard.annuaire_global'|trans({}, 'dashboard') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('personne_listeDiffusion') }}"><span
-                                    class="fa fa-envelope"></span> {{ 'dashboard.liste_diffusion'| trans }}
+                        <a href="{{ path('MgatePersonne_listeDiffusion') }}">
+                            <span class="fa fa-envelope"></span>
+                            {{ 'dashboard.liste_diffusion'|trans({}, 'dashboard') }}
                         </a>
                     </li>
                 {% endif %}
@@ -133,12 +160,54 @@
         </li>
     {% endif %}
 
+    <!-- QUALITE -->
+    <li class="treeview">
+        <a href="#">
+            <i class="icon-mini fa fa-check-circle"></i>
+            <span class="nav-label">
+                {{ 'dashboard.qualite'|trans({}, 'dashboard') }}
+            </span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li class="dropdown-header">Espace Réponse</li>
+            <li>
+                <a href="{{ path('AEI_quality_reactivity_answer') }}">
+                    <span class="fa fa-flash"></span>
+                    Répondre au test de
+                    <br/>
+                    Réactivité</a>
+            </li>
+            <li>
+                <a href="{{ path('AEI_quality_mood_answer') }}">
+                    <span class="fa fa-smile-o"></span>
+                    Répondre au test de Moral</a>
+            </li>
+            {% if is_granted('ROLE_QUALITE') %}
+                <li class="divider"></li>
+                <li class="dropdown-header">Administration</li>
+                <li>
+                    <a href="{{ path('AEI_quality_admin_reactivity') }}">
+                        <span class="fa fa-bar-chart"></span>
+                        Administration Réactivité
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('AEI_quality_admin_mood') }}">
+                        <span class="fa fa-bar-chart"></span>
+                        Administration Moral
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </li>
+
     <!-- RESSOURCES HUMAINES -->
     {% if is_granted('ROLE_SUIVEUR') %}
         <li>
-            <a href="{{ path('hr_competence_homepage') }}">
+            <a href="{{ path('N7consultingRh_competence_homepage') }}">
                 <i class="icon-mini fa fa-users"></i>
-                <span class="nav-label">{{ 'dashboard.rh_competences'| trans }}</span>
+                <span class="nav-label">{{ 'dashboard.rh_competences'|trans({}, 'dashboard') }}</span>
             </a>
         </li>
     {% endif %}
@@ -146,43 +215,68 @@
 
     <!-- TRESORERIE-->
     {% if is_granted('ROLE_TRESO') %}
-        <li>
+        <li class="treeview">
             <a href="#">
                 <i class="icon-mini fa fa-usd"></i>
-                <span class="nav-label">{{ 'dashboard.tresorerie'| trans }} </span>
+                <span class="nav-label">{{ 'dashboard.tresorerie'|trans({}, 'dashboard') }}
+                </span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li class="dropdown-header">{{ 'dashboard.saisie_informations'| trans }}</li>
-                <li><a href="{{ path('treso_Facture_index') }}"><span
-                                class="fa fa-credit-card"></span> {{ 'dashboard.factures'| trans }}</a>
-                </li>
-                <li><a href="{{ path('treso_BV_index') }}"><span
-                                class="fa fa-id-card-o"></span> {{ 'dashboard.bvs'| trans }}</a></li>
-                <li><a href="{{ path('treso_NoteDeFrais_index') }}"><span
-                                class="fa fa-sticky-note-o"></span> {{ 'dashboard.nfs'| trans }}</a>
-                </li>
-                <li class="divider"></li>
-                <li class="dropdown-header">{{ 'dashboard.tableaux_suivi'| trans }}</li>
-                <li><a href="{{ path('treso_Declaratif_TVA') }}"><span
-                                class="fa fa-barcode"></span> {{ 'dashboard.declaratif_tva'| trans }}
-                    </a></li>
-                <li><a href="{{ path('treso_Declaratif_BRC') }}"><span
-                                class="fa fa-qrcode"></span> {{ 'dashboard.bordereau_cotisations'| trans }}
-                    </a></li>
+                <li class="dropdown-header">{{ 'dashboard.saisie_informations'|trans({}, 'dashboard') }}</li>
                 <li>
-                    <a href="{{ path('treso_urssaf', {'year': "now"|date('Y'), 'month': "now"|date('m')}) }}"><span
-                                class="fa fa-group"></span> {{ 'dashboard.intervenants'| trans }} </a>
+                    <a href="{{ path('MgateTreso_Facture_index') }}">
+                        <span class="fa fa-credit-card"></span>
+                        {{ 'dashboard.factures'|trans({}, 'dashboard') }}</a>
+                </li>
+                <li>
+                    <a href="{{ path('MgateTreso_BV_index') }}">
+                        <span class="fa fa-id-card-o"></span>
+                        {{ 'dashboard.bvs'|trans({}, 'dashboard') }}</a>
+                </li>
+                <li>
+                    <a href="{{ path('MgateTreso_NoteDeFrais_index') }}">
+                        <span class="fa fa-sticky-note-o"></span>
+                        {{ 'dashboard.nfs'|trans({}, 'dashboard') }}</a>
                 </li>
                 <li class="divider"></li>
-                <li class="dropdown-header">{{ 'dashboard.administration'| trans }}</li>
+                <li class="dropdown-header">{{ 'dashboard.tableaux_suivi'|trans({}, 'dashboard') }}</li>
+                <li>
+                    <a href="{{ path('MgateTreso_Declaratif_TVA') }}">
+                        <span class="fa fa-barcode"></span>
+                        {{ 'dashboard.declaratif_tva'|trans({}, 'dashboard') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('MgateTreso_Declaratif_BRC') }}">
+                        <span class="fa fa-qrcode"></span>
+                        {{ 'dashboard.bordereau_cotisations'|trans({}, 'dashboard')|raw }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('Mgate_treso_urssaf', {'year': "now"|date('Y'), 'month': "now"|date('m')}) }}">
+                        <span class="fa fa-group"></span>
+                        {{ 'dashboard.intervenants'|trans({}, 'dashboard') }}
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li class="dropdown-header">{{ 'dashboard.administration'|trans({}, 'dashboard') }}</li>
 
-                <li><a href="{{ path('treso_Compte_index') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.comptes'| trans }}</a></li>
-                <li><a href="{{ path('treso_BaseURSSAF_index') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.Base_urssaf'| trans }}</a></li>
-                <li><a href="{{ path('treso_CotisationURSSAF_index') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.cotisations'| trans }}</a></li>
+                <li>
+                    <a href="{{ path('MgateTreso_Compte_index') }}">
+                        <span class="fa fa-list"></span>
+                        {{ 'dashboard.comptes'|trans({}, 'dashboard') }}</a>
+                </li>
+                <li>
+                    <a href="{{ path('MgateTreso_BaseURSSAF_index') }}">
+                        <span class="fa fa-list"></span>
+                        {{ 'dashboard.Base_urssaf'|trans({}, 'dashboard') }}</a>
+                </li>
+                <li>
+                    <a href="{{ path('MgateTreso_CotisationURSSAF_index') }}">
+                        <span class="fa fa-list"></span>
+                        {{ 'dashboard.cotisations'|trans({}, 'dashboard') }}</a>
+                </li>
             </ul>
         </li>
     {% endif %}
@@ -190,29 +284,41 @@
 
     <!-- RECRUTEMENT FORMATIONS PASSATION -->
     {% if is_granted('ROLE_SUIVEUR') %}
-        <li>
+        <li class="treeview">
             <a href="#">
                 <i class="icon-mini fa fa-graduation-cap"></i>
-                <span class="nav-label">{{ 'dashboard.formations'| trans }} </span>
+                <span class="nav-label">{{ 'dashboard.formations'|trans({}, 'dashboard') }}
+                </span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li class="dropdown-header">{{ 'dashboard.formations'| trans }}</li>
-                <li><a href="{{ path('formations_lister') }}"><span
-                                class="fa fa-book"></span> {{ 'dashboard.formations_voir'| trans }}</a>
+                <li class="dropdown-header">{{ 'dashboard.formations'|trans({}, 'dashboard') }}</li>
+                <li>
+                    <a href="{{ path('Mgate_formations_lister') }}">
+                        <span class="fa fa-book"></span>
+                        {{ 'dashboard.formations_voir'|trans({}, 'dashboard') }}</a>
                 </li>
                 {% if is_granted('ROLE_CA') %}
                     <li class="divider"></li>
-                    <li class="dropdown-header">{{ 'dashboard.administration'| trans }}</li>
-                    <li><a href="{{ path('formations_index_admin') }}"><span
-                                    class="fa fa-list"></span> {{ 'dashboard.formations_gerer'| trans }}
-                        </a></li>
-                    <li><a href="{{ path('formation_ajouter') }}"><span
-                                    class="fa fa-plus"></span> {{ 'dashboard.formation_ajouter'| trans }}
-                        </a></li>
-                    <li><a href="{{ path('formation_participation') }}"><span
-                                    class="fa fa-tasks"></span> {{ 'dashboard.particpants_voir'| trans }}
-                        </a></li>
+                    <li class="dropdown-header">{{ 'dashboard.administration'|trans({}, 'dashboard') }}</li>
+                    <li>
+                        <a href="{{ path('Mgate_formations_index_admin') }}">
+                            <span class="fa fa-list"></span>
+                            {{ 'dashboard.formations_gerer'|trans({}, 'dashboard') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('Mgate_formation_ajouter') }}">
+                            <span class="fa fa-plus"></span>
+                            {{ 'dashboard.formation_ajouter'|trans({}, 'dashboard') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('Mgate_formation_participation') }}">
+                            <span class="fa fa-tasks"></span>
+                            {{ 'dashboard.particpants_voir'|trans({}, 'dashboard') }}
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </li>
@@ -220,64 +326,131 @@
 
     <!-- PILOTAGE DE LA J.E. -->
     {% if is_granted('ROLE_CA') %}
-        <li class="">
+        <li class="treeview">
             <a href="#">
                 <i class="icon-mini fa fa-paper-plane"></i>
-                <span class="nav-label">{{ 'dashboard.pilotage_je'| trans }}</span>
-                <i class="fa fa-angle-left pull-right"></i>
-            </a>
-            <ul class="treeview-menu">
-                <li><a href="{{ path('stat_index') }}"><span
-                                class="fa fa-globe"></span> {{ 'dashboard.indicateurs'| trans }}</a></li>
-            </ul>
-        </li>
-    {% endif %}
-
-    <!-- ADMINISTRATION DU SITE -->
-    {% if is_granted('ROLE_ADMIN') %}
-        <li>
-            <a href="#">
-                <i class="icon-mini fa fa-cogs"></i>
-                <span class="nav-label">{{ 'dashboard.administration'| trans }}</span>
+                <span class="nav-label">{{ 'dashboard.pilotage_je'|trans({}, 'dashboard') }}</span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
                 <li>
-                    <a href="#">{{ 'dashboard.documents'| trans }} <i
-                                class="fa fa-angle-left pull-right"></i></a>
+                    <a href="{{ path('Mgate_indicateurs_index') }}">
+                        <span class="fa fa-globe"></span>
+                        {{ 'dashboard.indicateurs'|trans({}, 'dashboard') }}</a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+
+    <li class="treeview">
+        <a href="#">
+            <i class="icon-mini fa fa-link"></i>
+            <span class="nav-label">Liens et outils</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li>
+                <a href="https://qualite.junior-aei.com/relectures/index.php" style="margin-left: 10px;" target="_blank">
+                    <i class="fa fa-angle-double-right"></i>
+                    Requête Relecture</a>
+            </li>
+            <li>
+                <a href="https://docs.google.com/forms/d/1CuQx-4Ib91h1MFrw3f862DCltOAT1KcV9g4fMZJd_PI" style="margin-left: 10px;" target="_blank">
+                    <i class="fa fa-angle-double-right"></i>
+                    Requête Trésorerie</a>
+            </li>
+            <li>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSccykB1OQfJp-Bm7aUkG5FE_SltlDtpWMN94K5EO2qoBDNavw/viewform" style="margin-left: 10px;" target="_blank">
+                    <i class="fa fa-angle-double-right"></i>
+                    Requête DSI</a>
+            </li>
+            <li>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScvmELRPYUbKfIZDQ5BMMtdVLNDUMUvr6TbqZeEI_h5XSXK-w/viewform?usp=sf_link" style="margin-left: 10px;" target="_blank">
+                    <i class="fa fa-angle-double-right"></i>
+                    Requête Communication</a>
+            </li>
+            <li>
+                <a href="https://gitea.junior-aei.com/" style="margin-left: 10px;" target="_blank">
+                    <i class="fa fa-angle-double-right"></i>
+                    Gitea</a>
+            </li>
+            <li>
+                <a href="https://wiki.junior-aei.com/" style="margin-left: 10px;" target="_blank">
+                    <i class="fa fa-angle-double-right"></i>Wiki</a>
+            </li>
+            <li>
+                <a href="https://drive.google.com/open?id=1y2olyobQXrzsYWsgjXPTeQyaWfmaCo2N" style="margin-left: 10px;" target="_blank">
+                    <i class="fa fa-angle-double-right"></i>Drive</a>
+            </li>
+
+        </ul>
+
+        <!-- ADMINISTRATION DU SITE -->
+        {% if is_granted('ROLE_ADMIN') %}
+        </li>
+        <li class="treeview">
+            <a href="#">
+                <i class="icon-mini fa fa-cogs"></i>
+                <span class="nav-label">{{ 'dashboard.administration'|trans({}, 'dashboard') }}</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li>
+                    <a href="#">{{ 'dashboard.documents'|trans({}, 'dashboard') }}
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
                     <ul class="treeview-menu">
-                        <li><a href="{{ path('publish_documenttype_index') }}"><span
-                                        class="fa fa-file"></span> {{ 'dashboard.documents_gestion'| trans }}
-                            </a></li>
-                        <li><a href="{{ path('publish_documenttype_upload') }}"><span
-                                        class="fa fa-floppy-o"></span> {{ 'dashboard.doctype_ajouter'| trans }}
-                            </a></li>
-                        <li><a href="{{ path('publish_import') }}"><span
-                                        class="fa fa-upload"></span> {{ 'dashboard.donnes_externes_importer'| trans }}
-                            </a></li>
+                        <li>
+                            <a href="{{ path('Mgate_publi_documenttype_index') }}">
+                                <span class="fa fa-file"></span>
+                                {{ 'dashboard.documents_gestion'|trans({}, 'dashboard') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('Mgate_publi_documenttype_upload') }}">
+                                <span class="fa fa-floppy-o"></span>
+                                {{ 'dashboard.doctype_ajouter'|trans({}, 'dashboard') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('Mgate_publi_import') }}">
+                                <span class="fa fa-upload"></span>
+                                {{ 'dashboard.donnes_externes_importer'|trans({}, 'dashboard') }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="divider"></li>
-                <li class="dropdown-header">{{ 'dashboard.postes'| trans }}</li>
-                <li><a href="{{ path('personne_poste_homepage') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.postes_filieres'| trans }}</a>
+                <li class="dropdown-header">{{ 'dashboard.postes'|trans({}, 'dashboard') }}</li>
+                <li>
+                    <a href="{{ path('MgatePersonne_poste_homepage') }}">
+                        <span class="fa fa-list"></span>
+                        {{ 'dashboard.postes_filieres'|trans({}, 'dashboard') }}</a>
                 </li>
                 <li class="divider"></li>
-                <li class="dropdown-header">{{ 'dashboard.compte_utilisateur'| trans }}:</li>
-                <li><a href="{{ path('user_lister') }}"><span
-                                class="fa fa-user"></span> {{ 'dashboard.lister_modifier'| trans }}</a>
+                <li class="dropdown-header">{{ 'dashboard.compte_utilisateur'|trans({}, 'dashboard') }}:</li>
+                <li>
+                    <a href="{{ path('Mgate_user_lister') }}">
+                        <span class="fa fa-user"></span>
+                        {{ 'dashboard.lister_modifier'|trans({}, 'dashboard') }}</a>
                 </li>
                 <li class="divider"></li>
-                <li class="dropdown-header">{{ 'dashboard.autres'| trans }}</li>
-                <li><a href="{{ path('project_domaine_index') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.domaine_competences'| trans }}
-                    </a></li>
-                <li><a href="{{ path('dashboard_parameters_admin') }}"><span
-                                class="fa fa-cog"></span> {{ 'dashboard.parameters'| trans }}</a></li>
+                <li class="dropdown-header">{{ 'dashboard.autres'|trans({}, 'dashboard') }}</li>
+                <li>
+                    <a href="{{ path('MgateSuivi_domaine_index') }}">
+                        <span class="fa fa-list"></span>
+                        {{ 'dashboard.domaine_competences'|trans({}, 'dashboard') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('Mgate_dashboard_parameters_admin') }}">
+                        <span class="fa fa-cog"></span>
+                        {{ 'dashboard.parameters'|trans({}, 'dashboard') }}</a>
+                </li>
 
                 {% if is_granted('ROLE_SUPER_ADMIN') %}
                     <li>
-                        <a href="{{ path('dashboard_homepage') }}over">{{ 'dashboard.administration_bdd'| trans }}</a>
+                        <a href="{{ path('Mgate_dashboard_homepage') }}over">{{ 'dashboard.administration_bdd'|trans({}, 'dashboard') }}</a>
                     </li>
                 {% endif %}
 
