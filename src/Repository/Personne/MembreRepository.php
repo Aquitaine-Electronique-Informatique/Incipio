@@ -115,6 +115,101 @@ class MembreRepository extends EntityRepository
         return $query;
     }
 
+    /**
+     * Retourne un query builder de tous les membres ayant au moins un poste et d'un pole precis.
+     * Utile dans le cas où l'on souhaite faire un formulaire d'uniquement les membres de la junior.
+     *
+     * @param int pole_id
+     * 
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getByMandatByPoleNonNulQueryBuilder($pole_id)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $query = $qb
+            ->select('m')
+            ->from(Membre::class, 'm')
+            ->leftJoin('m.mandats', 'mm')
+            ->innerJoin('mm.poste', 'pos')
+            ->innerJoin('pos.pole', 'pol')
+            ->where('mm.id IS NOT NULL AND pol.id = :pole')
+            ->setParameter('pole', $pole_id);
+
+        return $query;
+    }
+
+    /**
+     * Retourne les membres de la promo courante parmi ceux passés en paramètre
+     * 
+     * @param Membre[] members
+     * 
+     * @return Membre[]
+     */
+    public function filtrerPromoCourante($members) 
+    {
+        $membresParMandat = [];
+        $last_promo = 0;
+        foreach ($members as $membre) {
+            $promo = $membre->getPromotion();
+            if ($promo > $last_promo) {
+                $last_promo = $promo;
+            }
+            if (array_key_exists($promo, $membresParMandat)) {
+                $membresParMandat[$promo][] = $membre;
+            } else {
+                $membresParMandat[$promo] = [$membre];
+            }
+        }
+        if ($last_promo != 0)
+            return $membresParMandat[$last_promo];
+        else
+            return $membresParMandat;
+
+    }
+
+    /**
+     * Retourne l'ensemble des membres du mandat actuel par pole 
+     * 
+     * @param int pole_id 
+     *
+     * @return Membre[]
+    */
+    public function getMembresPoleCourant($pole_id)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $entities = $this->getByMandatByPoleNonNulQueryBuilder($pole_id)->getQuery()->getResult();
+        
+        return $this->filtrerPromoCourante($entities);
+
+    }
+
+    /**
+     * Retourne l'ensemble des membres (administrateurs) du mandat actuel  
+     * 
+     * @return Membre[]
+    */
+    public function getMembresAdminCourant()
+    {
+        $entities = $this->getByMandatNonNulQueryBuilder()->getQuery()->getResult();
+
+        return $this->filtrerPromoCourante($entities);
+
+    }
+
+
+    public function getLastPromo() 
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $query = $qb->select('MAX(m.promotion)')
+                ->from(Membre::class, 'm')
+                ->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
+
     /** Fonction retournant une jointure entre un membre et ses competences
      *
      * @param $id
