@@ -1,0 +1,20 @@
+{% extends "Quality\layout.html.twig" %}
+
+{% block content_bundle %}
+
+<div class="box box-danger">
+    <div class="box-header">
+        <h3 class="box-title"><i class="fa fa-edit"></i>Nouvelle question de réactivité</h3>
+    </div>
+        {{ form_start(form) }}
+        
+        {{ form_widget(form) }}
+
+        <br/>
+
+        <input type="submit" value="Envoyer la question" class="btn btn-success"/>
+
+        {{ form_end(form) }}
+</div><!-- /.box -->
+
+{% endblock %}

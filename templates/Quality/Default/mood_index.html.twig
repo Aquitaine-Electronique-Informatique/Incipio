@@ -1,0 +1,246 @@
+{% extends "Quality/layout.html.twig" %}
+
+{% block content_title %}
+{{ 'dashboard.qualite'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+<div class="row">
+    <div class="col-sm-12">
+
+         <div class="bs-callout bs-callout-success" style="background:white;">
+            <div class="box-header row">
+                <div class="col-sm-9">
+                    {% if current_question != null %}
+                        <h3 class="box-title"><i class="fa fa-question-circle"></i> Question de moral courante</h3>
+                        <p>Depuis le {{current_question.askedAt|date('d-m-Y à H:i')}}</p>
+                        {% if isAdmin and canGenerate %}
+                            <div class="col-xs-3">
+                                <button type="button" class="btn btn-success" {% if current_question.hasMoodStats() %}  disabled {% endif %} onClick="location.href='{{path('AEI_quality_generate_mood_stats', {'id': current_question.id})}}'"><i class='fa fa-table'></i> Générer statistiques</button>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <h3 class="box-title"><i>Aucune question de moral en cours</i></h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    
+        {% if displayQuestionForm %}
+            <a class="btn btn-success" href="{{path('AEI_quality_new_mood_question')}}"> Envoyer une nouvelle question de moral</a>
+        {% endif %}
+
+        <div class="box box-info">
+            <div class="box-header">
+                <i class="fa fa-check"></i>
+                <h3 class="box-title">Test de Moral</h3>
+            </div><!-- /.box-header -->
+
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover">
+                    <tr>
+                        <th class="membersNameCol">Nom</th>
+                        <th class="membersSurnameCol">Prénom</th>
+                        <th class="membersDateCol">Délai de réponse</th>
+                        <th class="membersAnswer1Col">Motivation</th>
+                        <th class="membersAnswer2Col">Raisons</th>
+                        <th class="membersAnswer3Col">Détails</th>
+                    </tr>
+                    {% for answer in answers %}
+                    <tr>
+                        <td>
+                            {{ answer.member.personne.nom }}
+                        </td>
+                        <td>
+                            {{ answer.member.personne.prenom }}
+                        </td>
+                        <td>
+                            {% set timelapse = date(answer.answeredAt).diff(date(current_question.askedAt)) %}
+                            {{ timelapse.h }} heure(s) {{ timelapse.m }} minute(s) {{ timelapse.s }} seconde(s)
+                        </td>
+                        <td>
+                            {% set bar_width = answer.answer1 * 10 %}
+                            <div class="progress progress-xs">
+                                <div class="progress-bar progress-bar-info" style="width: {{ bar_width }}%"></div>
+                            </div>
+                        </td>
+                        <td>
+                            {% for element in answer.answer2 %}
+                                {{ attribute(mood_reasons, element) }} 
+                                <br/>
+                            {% endfor %}    
+                        </td>
+                        <td>
+                            {{ answer.answer3 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
+        <div class="box box-info">
+            <div class="box-header">
+                <i class="fa fa-bar-chart"></i>
+                <h3 class="box-title">Graphiques</h3>
+            </div><!-- /.box-header -->
+
+            <div class="box-body">
+                <h3>Légende</h3>
+                <blockquote>
+                    <p><span class="legend-color ct-series-c"></span><span class="legend-text">Pas de réponse</span></p>
+                    <p><span class="legend-color ct-series-a"></span><span class="legend-text">Réponse</span></p>
+                </blockquote>
+
+                <div id="slider" class="slider">
+                    <div class="slider-header text-center">
+                        <button onclick="slide(1);" type="button" class="btn btn-primary prev" aria-label="Précédent">
+                            <span class="fa fa-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Précédent</span>
+                        </button>
+                        <h4 class="slider-title"></h4>
+                        <button onclick="slide(0);" type="button" class="btn btn-primary next" aria-label="Suivant">
+                            <span class="fa fa-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Suivant</span>
+                        </button>
+                    </div>
+
+                    <!-- Wrapper for slides -->
+                    <div class="slider-body">
+                        {% for question in questions %}
+                            {% if question.hasMoodStats() %}
+                            <div class="item{% if question.id == current_question.id %}{{" active"}}{% endif %}">
+                                <div class="ct-chart" id="chartAttendency{{question.id}}" title="{{question.askedAt|date("m/Y", "Europe/Paris")}}">
+                                </div>
+                                <h3 align="center">Pourcentage de réponse par pôle</h3>
+                                <div class="ct-chart" id="chartResults{{question.id}}" title="{{question.askedAt|date("m/Y", "Europe/Paris")}}">
+                                </div>
+                                <h3 align="center">Motivation moyenne par pôle</h3>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+
+{% endblock %}
+
+        {% block javascript %}
+        {{ parent() }}
+        <script src="{{ asset('js/chartist/chartist.min.js') }}"></script>
+        <script type="text/javascript">
+            var slider = $('#slider');
+            if ($('#slider .item:first').hasClass('active')) {
+                $('button.prev').prop('disabled', 'true');
+            }
+            if ($('#slider .item:last').hasClass('active')) {
+                $('button.next').prop('disabled', 'true');
+            }
+            $(slider).find('.slider-title').text($(slider).find('.item.active .ct-chart').attr('title'));
+
+            function update_button_states(slider, previous) {
+                $(slider).find('button').each(function () {
+                    $(this).removeAttr('disabled');
+                });
+                if ($((previous == 1) ? '#slider .item:first' : '#slider .item:last').hasClass('active')) {
+                    $((previous == 1) ? 'button.prev' : 'button.next').prop('disabled', 'true');
+                }
+            }
+
+            function slide(previous) {
+                var slider = $('#slider');
+                var current = $('#slider .item.active');
+                if (!$((previous == 1) ? '#slider .item:first' : '#slider .item:last').hasClass('active')) {
+                    var new_slide = (previous == 1) ? $(current).prev() : $(current).next();
+                    $(current).removeClass('active');
+                    $(new_slide).addClass('active');
+                    $(new_slide).find('.ct-chart')[0].__chartist__.update();
+                    $(slider).find('.slider-title').text($(new_slide).find('.ct-chart').attr('title'));
+                    update_button_states($(slider), previous);
+                }
+            }
+
+            {% for question in questions %}
+            // Chartist
+            new Chartist.Bar('#chartAttendency{{question.id}}', {
+                labels: [{{ pole_names|join(', ')|raw }}],
+                series: [
+                    {{ print_matrix(question.attendency) }}
+                ]
+            }, {
+                stackBars: true,
+                axisY: {
+                    labelInterpolationFnc: function (value) {
+                        return (value) + '%';
+                    },
+                    scaleMinSpace: 100
+                },
+                axisX: {
+                    showLabel: true
+                },
+                width: '100%',
+                height: '500px',
+                chartPadding: {
+                    top: 25,
+                    right: 15,
+                    bottom: 5,
+                    left: 10
+                }
+            }).on('draw', function (data) {
+                if (data.type === 'bar') {
+                    data.element.attr({
+                        style: 'stroke-width: 60px'
+                    });
+                    if (data.value.y > 8) {
+                        data.element.root().elem('text', {
+                            x: data.x1,
+                            y: data.y2 + (data.y1 - data.y2) / 2 - 10
+                        }, 'ct-bar-label').text(data.value.y + "%");
+                    }
+                }
+            });
+            // Chartist
+            new Chartist.Bar('#chartResults{{question.id}}', {
+                labels: [{{ pole_names|join(', ')|raw }}],
+                series: [
+                    {{ print_matrix(question.results) }}
+                ]
+            }, {
+                stackBars: true,
+                axisY: {
+                    labelInterpolationFnc: function (value) {
+                        return (value) + '%';
+                    },
+                    scaleMinSpace: 100
+                },
+                axisX: {
+                    showLabel: true
+                },
+                width: '100%',
+                height: '500px',
+                chartPadding: {
+                    top: 25,
+                    right: 15,
+                    bottom: 5,
+                    left: 10
+                }
+            }).on('draw', function (data) {
+                if (data.type === 'bar') {
+                    data.element.attr({
+                        style: 'stroke-width: 60px'
+                    });
+                    if (data.value.y > 8) {
+                        data.element.root().elem('text', {
+                            x: data.x1,
+                            y: data.y2 + (data.y1 - data.y2) / 2 - 10
+                        }, 'ct-bar-label').text(data.value.y + "%");
+                    }
+                }
+            });
+            {% endfor %}
+        </script>
+        {% endblock %}

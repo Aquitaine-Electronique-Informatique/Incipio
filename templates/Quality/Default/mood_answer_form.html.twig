@@ -1,0 +1,80 @@
+{% extends "Quality/layout.html.twig" %}
+
+{% block content_title %}
+    {{ 'dashboard.qualite'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <div class="box box-danger">
+        <div class="box-header">
+            <h3 class="box-title"><i class="fa fa-send"></i>
+                Répondre au Test de Moral</h3>
+        </div>
+        {{ form_start(form) }}
+        <table class="table table-bordered table-striped standard">
+            <tr>
+                <th>{{ form_label(form.answer1) }} {{ form_errors(form.answer1) }}</th>
+                <td>{{ form_widget(form.answer1) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.answer2) }} {{ form_errors(form.answer2) }}</th>
+                <td>{{ form_widget(form.answer2, {'attr': {'style': 'width: 100%'}}) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.answer3) }} {{ form_errors(form.answer3) }}</th>
+                <td>{{ form_widget(form.answer3, {'attr': {'style': 'width: 100%'}}) }}</td>
+            </tr>
+        </table>
+
+        <input type="submit" value="Envoyer la réponse" class="btn btn-success"/>
+
+        {{ form_end(form) }}
+
+        {{ form_javascript(form) }}
+    </div>
+
+    {# <script type="text/javascript">
+        function addTagForm(collectionHolder, i, type) {
+            // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+            var prototype = collectionHolder.attr('data-prototype');
+
+            // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+            // la longueur de la collection courante
+            var id = 0;
+            if (type == 'formateur') {
+                id = collectionHolderFormateurs.children().first().children().length;
+                var newForm = prototype.replace(/__name__/g, id);
+                newForm = '<tr id="' + type + i + '"><td></td><td>' + newForm + '</td></tr>';
+            }
+            else {
+                id = collectionHolderMembres.children().length;
+                var newForm = prototype.replace(/__name__/g, id);
+                newForm = '<div class="col-md-4" id="' + type + i + '"><span></span> ' + newForm + '</div>';
+            }
+
+            // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+            var $newForm = collectionHolder.append(newForm);
+            addDeleteButton($('#' + type + i));
+            triggerJavascript(type, id);
+        }
+
+        function addDeleteButton(tag) {
+
+            var deleteButton =  $('<button class="btn btn-danger" id="myButtonDelete">X</button>');
+            $(tag).children().first().append(deleteButton);
+
+            deleteButton.on('click', function (e) {
+                e.preventDefault();
+                //CONFIRM confirmation suppression
+                var message = "Êtes vous sûr de vouloir supprimer ce membre ?";
+                bootbox.confirm(message, function (result) {
+                    if (result) {
+                        tag.remove();
+                    }
+                });
+            });
+        }
+    </script> #}
+
+{% endblock %}

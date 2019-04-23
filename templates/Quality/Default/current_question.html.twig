@@ -1,0 +1,17 @@
+  <div class="bs-callout bs-callout-success" style="background:white;">
+    <div class="box-header row">
+        <div class="col-sm-9">
+            {% if current_question != null %}
+                <h3 class="box-title"><i class="fa fa-question-circle"></i> {{current_question.text}}</h3>
+                <p>Depuis le {{current_question.askedAt|date('d-m-Y à H:i')}}</p>
+                {% if isAdmin and canGenerate %}
+                    <div class="col-xs-3">
+                        <button type="button" class="btn btn-success" {% if current_question.hasPolestats() %}  disabled {% endif %} onClick="location.href='{{path('AEI_quality_generate_reactivity_stats', {'id': current_question.id})}}'"><i class='fa fa-table'></i> Générer statistiques</button>
+                    </div>
+                {% endif %}
+            {% else %}
+                <h3 class="box-title"><i>Aucune question en cours</i></h3>
+            {% endif %}
+        </div>
+    </div>
+</div>

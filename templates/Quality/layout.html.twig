@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ 'dashboard.qualite'|trans({}, 'dashboard') }} {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                {% block content_title %}
+                    {{ 'dashboard.qualite'|trans({}, 'dashboard') }}
+                {% endblock %}
+            </h3>
+            {% block breadcrumb %}
+                <ul class="breadcrumb no-margin pull-right">
+                    <li>
+                        <a href="{{ path('AEI_quality_admin_reactivity') }}">
+                            {{ 'dashboard.quality'|trans({}, 'dashboard') }}
+                        </a>
+                    </li>
+                    {% block breadcrumb_items %}{% endblock %}
+                    <li class="active">
+                        {% block breadcrumb_active %}{% endblock %}
+                    </li>
+                </ul>
+            {% endblock %}
+        </div>
+        <div class="box-body">
+            {# On définit un nouveau block, que les vues du bundle pourront remplir #}
+            {% block content_bundle %}
+            {% endblock %}
+
+        </div>
+        <div class="box-footer"></div>
+    </div>
+
+{% endblock %}

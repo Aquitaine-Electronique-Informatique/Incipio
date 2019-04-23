@@ -1,0 +1,25 @@
+{% extends "Quality\layout.html.twig" %}
+
+{% block content_title %}
+    {{ 'dashboard.qualite'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    {{ include('AEIQualityBundle:Default:current_question.html.twig') }}
+
+    <div class="box box-danger">
+        <div class="box-header">
+            <h3 class="box-title"><i class="fa fa-send"></i>
+                Répondre au Test de Réactivité</h3>
+        </div>
+        {{ form_start(form) }}
+
+        {{ form_widget(form) }}
+
+        <input type="submit" value="Envoyer la réponse" class="btn btn-success"/>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

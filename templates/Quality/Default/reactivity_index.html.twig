@@ -1,0 +1,184 @@
+{% extends "Quality\layout.html.twig" %}
+
+{% block content_title %}
+{{ 'dashboard.qualite'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+<div class="row">
+    <div class="col-sm-12">
+
+        {{ include('AEIQualityBundle:Default:current_question.html.twig') }}
+    
+        {% if displayQuestionForm %}
+            <a class="btn btn-success" href="{{path('AEI_quality_new_reactivity_question')}}"> Envoyer une nouvelle question de réactivité</a>
+        {% endif %}
+
+        <div class="box box-info">
+            <div class="box-header">
+                <i class="fa fa-check"></i>
+                <h3 class="box-title">Test de Réactivité</h3>
+            </div><!-- /.box-header -->
+
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover">
+                    <tr>
+                        <th class="membersNameCol">Nom</th>
+                        <th class="membersPoleCol">Prénom</th>
+                        <th class="membersAnswerCol">Réponse</th>
+                        <th class="membersDateCol">Délai de réponse</th>
+                        <th class="membersActionsCol">Valider</th>
+                    </tr>
+                    {% for answer in answers %}
+                    <tr>
+                        <td>
+                            {{ answer.member.personne.nom }}
+                        </td>
+                        <td>
+                            {{ answer.member.personne.prenom }}
+                        </td>
+                        <td>
+                            {{ answer.answer }}
+                        </td>
+                        <td>
+                            {% set timelapse = date(answer.answeredAt).diff(date(current_question.askedAt)) %}
+                            {{ timelapse.h }} heure(s) {{ timelapse.m }} minute(s) {{ timelapse.s }} seconde(s)
+                        </td>
+                        <td>
+                            {% if answer.isValidated() == 0 %}
+                            <a href='{{path('AEI_quality_validate_answer', {'id': answer.id})}}'><i class='fa fa-check'></i>
+                                Valider</a>
+                            {% else %}
+                            <i class="fa fa-check-circle"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
+        <div class="box box-info">
+            <div class="box-header">
+                <i class="fa fa-bar-chart"></i>
+                <h3 class="box-title">Graphiques</h3>
+            </div><!-- /.box-header -->
+
+            <div class="box-body">
+                <h3>Légende</h3>
+                <blockquote>
+                    <p><span class="legend-color ct-series-c"></span><span class="legend-text">Pas de réponse</span></p>
+                    <p><span class="legend-color ct-series-b"></span><span class="legend-text">Mauvaise réponse</span></p>
+                    <p><span class="legend-color ct-series-a"></span><span class="legend-text">Bonne réponse</span></p>
+                </blockquote>
+
+                <div id="slider" class="slider">
+                    <div class="slider-header text-center">
+                        <button onclick="slide(1);" type="button" class="btn btn-primary prev" aria-label="Précédent">
+                            <span class="fa fa-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Précédent</span>
+                        </button>
+                        <h4 class="slider-title"></h4>
+                        <button onclick="slide(0);" type="button" class="btn btn-primary next" aria-label="Suivant">
+                            <span class="fa fa-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Suivant</span>
+                        </button>
+                    </div>
+
+                    <!-- Wrapper for slides -->
+                    <div class="slider-body">
+                        {% for question in questions %}
+                            {% if question.hasPolestats() %}
+                            <div class="item{% if question.id == current_question.id %}{{" active"}}{% endif %}">
+                                <div class="ct-chart" id="chart{{question.id}}" title="{{question.askedAt|date("m/Y", "Europe/Paris")}}">
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+
+{% endblock %}
+
+        {% block javascript %}
+        {{ parent() }}
+        <script src="{{ asset('js/chartist/chartist.min.js') }}"></script>
+        <script type="text/javascript">
+            var slider = $('#slider');
+            if ($('#slider .item:first').hasClass('active')) {
+                $('button.prev').prop('disabled', 'true');
+            }
+            if ($('#slider .item:last').hasClass('active')) {
+                $('button.next').prop('disabled', 'true');
+            }
+            $(slider).find('.slider-title').text($(slider).find('.item.active .ct-chart').attr('title'));
+
+            function update_button_states(slider, previous) {
+                $(slider).find('button').each(function () {
+                    $(this).removeAttr('disabled');
+                });
+                if ($((previous == 1) ? '#slider .item:first' : '#slider .item:last').hasClass('active')) {
+                    $((previous == 1) ? 'button.prev' : 'button.next').prop('disabled', 'true');
+                }
+            }
+
+            function slide(previous) {
+                var slider = $('#slider');
+                var current = $('#slider .item.active');
+                if (!$((previous == 1) ? '#slider .item:first' : '#slider .item:last').hasClass('active')) {
+                    var new_slide = (previous == 1) ? $(current).prev() : $(current).next();
+                    $(current).removeClass('active');
+                    $(new_slide).addClass('active');
+                    $(new_slide).find('.ct-chart')[0].__chartist__.update();
+                    $(slider).find('.slider-title').text($(new_slide).find('.ct-chart').attr('title'));
+                    update_button_states($(slider), previous);
+                }
+            }
+
+            {% for question in questions %}
+            // Chartist
+            new Chartist.Bar('#chart{{question.id}}', {
+                labels: [{{ pole_names|join(', ')|raw }}],
+                series: [
+                    {{ print_matrix(question.results) }}
+                ]
+            }, {
+                stackBars: true,
+                axisY: {
+                    labelInterpolationFnc: function (value) {
+                        return (value) + '%';
+                    },
+                    scaleMinSpace: 100
+                },
+                axisX: {
+                    showLabel: true
+                },
+                width: '100%',
+                height: '500px',
+                chartPadding: {
+                    top: 25,
+                    right: 15,
+                    bottom: 5,
+                    left: 10
+                }
+            }).on('draw', function (data) {
+                if (data.type === 'bar') {
+                    data.element.attr({
+                        style: 'stroke-width: 60px'
+                    });
+                    if (data.value.y > 8) {
+                        data.element.root().elem('text', {
+                            x: data.x1,
+                            y: data.y2 + (data.y1 - data.y2) / 2 - 10
+                        }, 'ct-bar-label').text(data.value.y + "%");
+                    }
+                }
+            });
+            {% endfor %}
+        </script>
+        {% endblock %}
