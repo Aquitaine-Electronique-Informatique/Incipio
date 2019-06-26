@@ -3,7 +3,7 @@
 namespace App\Entity\Quality;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mgate\PersonneBundle\Entity\Membre;
+use App\Entity\Personne\Membre;
 use DateTime;
 
 /**
@@ -28,13 +28,13 @@ class ReactivityAnswer{
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AEIQualityBundle\Entity\ReactivityQuestion")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Quality\ReactivityQuestion")
      * @ORM\JoinColumn(name="reactivity_question_id", referencedColumnName="id")
      */
     protected $reactivity_question;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Membre")
      * @ORM\JoinColumn(name="member_id", referencedColumnName="id")
      */
     protected $member;

@@ -12,6 +12,9 @@ use App\Entity\Quality\ReactivityAnswer as ReactivityAnswer;
 
 class ReactivityAnswerController extends Controller
 {
+    /**
+     * @Route("/", name="quality_reactivity_answer", methods={"GET"})
+     */
     public function newReactivityAnswer(Request $request) 
     {
         $em = $this->getDoctrine()->getManager();

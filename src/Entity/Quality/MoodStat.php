@@ -4,7 +4,7 @@ namespace App\Entity\Quality;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Mgate\PersonneBundle\Entity\Pole;
+use App\Entity\Personne\Pole;
 
 /**
  * @ORM\Entity
@@ -49,7 +49,7 @@ class MoodStat
     protected $mood_question;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mgate\PersonneBundle\Entity\Pole")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Pole")
      * @ORM\JoinColumn(name="pole_id", referencedColumnName="id")
      */
     protected $pole;

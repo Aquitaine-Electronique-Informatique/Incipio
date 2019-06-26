@@ -25,19 +25,26 @@ class LoadPosteFiliereData extends Fixture
             'Président par procuration',
             'Vice-président',
             'Trésorier',
-            'Suiveur Manager Qualité',
             'Secrétaire général',
             //ca
-            'Manager Qualité-Tréso',
-            'Vice-Trésorier',
-            'Binome Qualité',
+            'Respo. Qualité',
             'Respo. Communication',
-            'Respo. SI',
-            "Respo. Dev'Co",
+            'DSI',
+            "Respo. Commercial",
+            "Respo. Études",
             //Membre
-            'membre',
-            'Intervenant',
-            'Chef de Projet',
+            'Suiveur Qualité-Tréso',
+            "Respo. Évènements",
+            "Respo. Engagements",
+            "Respo. Partenariats",
+            "Chargé d'études",
+            "Chargé de mission SI",
+            "Chargé de mission Communication",
+            "Chargé de mission Qualité",
+            "Commercial",
+            'Comptable',
+            'Membre',
+            'Réalisateur',
         ];
 
         foreach ($postes as $poste) {
@@ -48,9 +55,21 @@ class LoadPosteFiliereData extends Fixture
             $manager->persist($p);
         }
 
-        $filiere = new Filiere();
-        $filiere->setNom('Filière d\'exemple');
-        $filiere->setDescription('Filière par défault, à éditer après l\'installation');
+        $info = new Filiere();
+        $info->setNom('Informatique');
+        $info->setDescription("Filière informatique de l'ENSEIRB-MATMECA.");
+
+        $matmeca = new Filiere();
+        $matmeca->setNom('MatMéca');
+        $matmeca->setDescription("Filière mathématiques et mécanique de l'ENSEIRB-MATMECA.");
+
+        $elec = new Filiere();
+        $elec->setNom('Électronique');
+        $elec->setDescription("Filière électronique de l'ENSEIRB-MATMECA.");
+
+        $telecom = new Filiere();
+        $telecom->setNom('Télécommunications');
+        $telecom->setDescription("Filière télécommunications de l'ENSEIRB-MATMECA.");
 
         $manager->flush();
     }
