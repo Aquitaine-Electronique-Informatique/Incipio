@@ -1,13 +1,19 @@
 {
-    "name": "",
+    "name": "AEI-Jeyser",
     "icons": [
         {
             "src": "/jeyser-icon-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
+        },
+        {
+            "src": "/logo_aei_512x512.png",
+            "sizes": "192x192",
+            "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
+    "theme_color": "#f31212",
     "background_color": "#ffffff",
+    "start_url": "/?utm_source=a2hs",
     "display": "standalone"
 }

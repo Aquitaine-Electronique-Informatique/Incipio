@@ -4,6 +4,7 @@ namespace App\Controller\Quality;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Quality\ReactivityQuestion;
 use App\Entity\Quality\ReactivityAnswer;
