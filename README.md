@@ -1,5 +1,7 @@
 # Jeyser CRM (AEI)
 
+[![Build Status](https://travis-ci.com/Aquitaine-Electronique-Informatique/Incipio.svg?branch=master)](https://travis-ci.com/Aquitaine-Electronique-Informatique/Incipio)
+
 This project is a fork of Jeyser CRM (formerly known as Incipio) an open-source, GDPR compliant 
 [ERP](https://en.wikipedia.org/wiki/Enterprise_resource_planning) / 
 [CRM](https://en.wikipedia.org/wiki/Customer_relationship_management) for all Junior Entreprises belonging or not to 
