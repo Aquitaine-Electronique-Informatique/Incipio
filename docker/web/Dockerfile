@@ -59,10 +59,9 @@ RUN mkdir -p var/cache var/logs var/sessions public/tmp \
     && composer clear-cache
 
 # Add application
-COPY ./ /app
+ADD ./ /app
 RUN composer dump-autoload --classmap-authoritative --no-dev \
     && composer run-script --no-dev post-install-cmd \
     # Fixes permissions issues in non-dev mode
     && chown -R www-data . var/cache var/logs var/sessions public/tmp
 
-CMD ["/app/docker/web/start.sh"]
