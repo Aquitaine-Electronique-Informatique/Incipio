@@ -17,7 +17,7 @@ class ServiceWorkerController extends Controller
     public function serveServiceWorker(Request $request) 
     {
         $sw = '../../../public/js/sw.js';
-        $response = new BinaryFileResponse($file);
+        $response = new BinaryFileResponse($sw);
         $response->headers->set('Content-Type', 'application/javascript');
         return $response;
     }
