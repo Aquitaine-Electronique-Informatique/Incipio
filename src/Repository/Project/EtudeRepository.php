@@ -90,7 +90,7 @@ class EtudeRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('e')
-            ->from('MgateSuiviBundle:Etude', 'e')
+            ->from(Etude::class, 'e')
             ->where('e.stateID= :state')
             ->setParameter('state', $state);
 
