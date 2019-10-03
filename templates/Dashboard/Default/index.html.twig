@@ -90,45 +90,42 @@
     </div>
 {% endblock %}
 
-{% block calenddar_bundle %}
+{% block calendar_bundle %}
     <div class="col-md-12">
         <!-- The calendar -->
         <link rel="stylesheet" href="{{ asset('css/fullcalendar.min.css') }}"/>
-        {% block javascript %}
-            {{ parent() }}
-            <script src="{{ asset('js/fullcalendar/lib/jquery.min.js') }}"></script>
-            <script src="{{ asset('js/fullcalendar/lib/jquery-ui.min.js') }}"></script>
-            <script src="{{ asset('js/fullcalendar/lib/moment.min.js') }}"></script>
-            <script src="{{ asset('js/fullcalendar/fullcalendar.min.js') }}"></script>
-            <script src="{{ asset('js/fullcalendar/locale/fr.js') }}"></script>
-            <script src="{{ asset('js/fullcalendar/gcal.js') }}"></script>
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $('#calendar').fullCalendar({
-                        lang: 'fr',
-                        firstDay: 1,
-                        scrollTime: '09:00:00',
-                        defaultView: 'agendaWeek',
-                        header: {
-                            left: 'month, agendaWeek',
-                            center: 'title',
-                            right: 'today, prev, next'
-                        },
-                        height: 600,
-                        googleCalendarApiKey: '',
-                        events: {
-                            googleCalendarId: 'aeijeeirb@gmail.com'
-                        }
-                    });
-                });
-            </script>
-        {% endblock %}
         <div id="calendar"></div>
     </div>
 {% endblock %}
 
 {% block javascript %}
     {{ parent() }}
+    <script src="{{ asset('js/fullcalendar/lib/jquery.min.js') }}"></script>
+    <!-- <script src="{{ asset('js/fullcalendar/lib/jquery-ui.min.js') }}"></script> -->
+    <script src="{{ asset('js/fullcalendar/lib/moment.min.js') }}"></script>
+    <script src="{{ asset('js/fullcalendar/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('js/fullcalendar/locale/fr.js') }}"></script>
+    <script src="{{ asset('js/fullcalendar/gcal.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#calendar').fullCalendar({
+                lang: 'fr',
+                firstDay: 1,
+                scrollTime: '09:00:00',
+                defaultView: 'agendaWeek',
+                header: {
+                    left: 'month, agendaWeek',
+                    center: 'title',
+                    right: 'today, prev, next'
+                },
+                height: 600,
+                googleCalendarApiKey: '',
+                events: {
+                    googleCalendarId: 'aeijeeirb@gmail.com'
+                }
+            });
+        });
+    </script>
     {% if is_granted('ROLE_ADMIN') %}
         <!-- Get latest Jeyser CRM release and display an info if a new one is available -->
         <script src="{{ asset('js/versioncompare.js') }}"></script>
