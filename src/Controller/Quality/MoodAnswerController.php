@@ -13,7 +13,7 @@ use App\Form\Quality\MoodAnswerType;
 class MoodAnswerController extends Controller
 {
     /**
-     * @Route("/", name="quality_mood_answer", methods={"GET"})
+     * @Route("/mood/answer", name="quality_mood_answer", methods={"GET"})
      */
     public function newMoodAnswer(Request $request) 
     {

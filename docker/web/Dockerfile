@@ -1,4 +1,4 @@
-FROM php:7.3-apache-stretch
+FROM php:7.3-apache
 
 # PHP extensions
 ENV APCU_VERSION 5.1.11

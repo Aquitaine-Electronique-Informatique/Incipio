@@ -21,7 +21,7 @@ class AdminQualityController extends Controller
 {
     /**
      * @Security("has_role('ROLE_QUALITE')")
-     * @Route("/", name="quality_reactivity_admin", methods={"GET"})
+     * @Route("/reactivity/admin", name="quality_reactivity_admin", methods={"GET"})
      */
     public function reactivityIndex()
     {
@@ -49,7 +49,7 @@ class AdminQualityController extends Controller
 
     /**
      * @Security("has_role('ROLE_QUALITE')")
-     * @Route("/", name="quality_mood_admin", methods={"GET"})
+     * @Route("/mood/admin", name="quality_mood_admin", methods={"GET"})
      */
     public function moodIndex()
     {
