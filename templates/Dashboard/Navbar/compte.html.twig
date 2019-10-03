@@ -10,11 +10,15 @@
             <li class="user-header bg-light-blue">
                 <img src="{{ asset('logo_aei.png') }}" class="img-circle" alt="User Image"/>
                 <p>
-                    {{ app.user.getPersonne().getPoste() }}
-                    <small>
-                        du mandat
-                    </small>
-                    {{ app.user.personne.membre.promotion }}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        Administrateur
+                    {% else %}
+                        {{ app.user.getPersonne().getPoste() }}
+                        <small>
+                            du mandat
+                        </small>
+                        {{ app.user.personne.membre.promotion }}
+                    {% endif %}
                 </p>
             </li>
             <li>
