@@ -314,7 +314,7 @@ class Prospect extends Adressable
      *
      *  @return DateTime
      */
-    public function getDateRencontre(){
+    public function getdate_rencontre(){
         return $this->date_rencontre;
     }
 
@@ -325,7 +325,7 @@ class Prospect extends Adressable
      *
      * @return Prospect
      */
-    public function setDateRencontre($date){
+    public function setdate_rencontre($date){
         $this->date_rencontre = $date;
 
         return $this;

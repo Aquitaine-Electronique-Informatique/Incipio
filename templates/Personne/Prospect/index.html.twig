@@ -44,12 +44,11 @@
                 </td>
                 <td>{{ prospect.entiteToString }}</td>
                 <td>{{ prospect.ville }}, {{ prospect.adresse }}</td>
-                <td>{{ prospect.employes }}</td>
+                <td>{{ prospect.employes|length }}</td>
                 <td>{% if prospect.direct %} ✔ {% else %} ❌ {% endif %}</td>
                 <td>{% if prospect.chaud %} ✔ {% else %} ❌ {% endif %}</td>
-                <td>{{ prospect.date_rencontre }}</td>
+                <td>{{ prospect.date_rencontre|date('t M Y')}}</td>
                 <td>{{ prospect.interet }}</td>
-es | length }}</td>
             </tr>
         {% endfor %}
         </tbody>
