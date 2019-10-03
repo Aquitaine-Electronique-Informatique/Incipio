@@ -39,3 +39,4 @@ Jeyser abides by european law [GDPR](https://www.eugdpr.org/) since the release 
   and that repository.
 
 If you are encountering a bug, raise an issue on Github, and we would be glad to fix it as quick as we can.
+

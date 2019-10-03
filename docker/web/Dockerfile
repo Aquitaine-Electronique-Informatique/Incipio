@@ -3,6 +3,7 @@ FROM php:7.3-apache-stretch
 # PHP extensions
 ENV APCU_VERSION 5.1.11
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV OPENSSL_CONF /etc/ssl/
 RUN buildDeps=" \
         libicu-dev \
         zlib1g-dev \
@@ -13,7 +14,7 @@ RUN buildDeps=" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         $buildDeps \
-        libicu57 \
+        libicu63 \
         zlib1g \
         libzip4 \
         git \
@@ -52,6 +53,7 @@ RUN /usr/bin/composer.sh \
 
 # Add dependencies (before app to make a better cache usage)
 WORKDIR /app
+ARG APP_ENV=prod
 COPY ./composer.json ./composer.lock /app/
 RUN mkdir -p var/cache var/logs var/sessions public/tmp \
     # Install dependencies
@@ -61,7 +63,6 @@ RUN mkdir -p var/cache var/logs var/sessions public/tmp \
 # Add application
 ADD ./ /app
 RUN composer dump-autoload --classmap-authoritative --no-dev \
-    && composer run-script --no-dev post-install-cmd \
     # Fixes permissions issues in non-dev mode
     && chown -R www-data . var/cache var/logs var/sessions public/tmp
 

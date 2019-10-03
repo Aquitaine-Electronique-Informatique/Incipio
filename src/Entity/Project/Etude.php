@@ -543,7 +543,7 @@ class Etude
             case 'AV':
                 return $this->getAvs()->get($key);
             case 'RM':
-                if ($key == -1) {
+                if (-1 == $key) {
                     return null;
                 } else {
                     return $this->getMissions()->get($key);
@@ -1559,7 +1559,7 @@ class Etude
             6 => 'Réseaux des élèves',
             7 => 'Contact spontané',
             8 => 'Ancien client',
-            9 => 'Dev\'Co N7C',
+            9 => 'Dev\'Co',
             10 => 'Partenariat JE',
             11 => 'Autre',
         ];

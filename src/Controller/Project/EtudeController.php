@@ -56,10 +56,11 @@ class EtudeController extends AbstractController
      * @Route(name="project_etude_homepage", path="/suivi/", methods={"GET","HEAD"})
      *
      * @param EtudeManager $etudeManager
+     * @param string       $roleVoirConfidentiel role required to access confidential projects, injected by DI
      *
      * @return Response
      */
-    public function index(EtudeManager $etudeManager)
+    public function index(EtudeManager $etudeManager, string $roleVoirConfidentiel)
     {
         $MANDAT_MAX = $etudeManager->getMaxMandat();
         $MANDAT_MIN = $etudeManager->getMinMandat();
@@ -98,6 +99,7 @@ class EtudeController extends AbstractController
             'etudesAvorteesParMandat' => $etudesAvorteesParMandat,
             'anneeCreation' => $anneeCreation,
             'mandatMax' => $MANDAT_MAX,
+            'role_voir_confidentiel' => $roleVoirConfidentiel,
         ]);
     }
 
@@ -106,10 +108,11 @@ class EtudeController extends AbstractController
      * @Route(name="project_etude_ajax", path="/suivi/get", methods={"GET","HEAD"})
      *
      * @param Request $request
+     * @param string  $roleVoirConfidentiel role required to access confidential projects, injected by DI
      *
      * @return Response
      */
-    public function getEtudesAsync(Request $request)
+    public function getEtudesAsync(Request $request, string $roleVoirConfidentiel)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -123,15 +126,22 @@ class EtudeController extends AbstractController
                 ], ['num' => 'DESC']);
 
                 if (self::STATE_ID_TERMINEE == $stateID) {
-                    return $this->render('Project/Etude/Tab/EtudesTerminees.html.twig', ['etudes' => $etudes]);
+                    return $this->render('Project/Etude/Tab/EtudesTerminees.html.twig', [
+                        'etudes' => $etudes,
+                        'role_voir_confidentiel' => $roleVoirConfidentiel,
+                    ]);
                 } elseif (self::STATE_ID_AVORTEE == $stateID) {
-                    return $this->render('Project/Etude/Tab/EtudesAvortees.html.twig', ['etudes' => $etudes]);
+                    return $this->render('Project/Etude/Tab/EtudesAvortees.html.twig', [
+                        'etudes' => $etudes,
+                        'role_voir_confidentiel' => $roleVoirConfidentiel,
+                    ]);
                 }
             }
         }
 
         return $this->render('Project/Etude/Tab/EtudesAvortees.html.twig', [
             'etudes' => null,
+            'role_voir_confidentiel' => $roleVoirConfidentiel,
         ]);
     }
 
@@ -165,7 +175,7 @@ class EtudeController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="project_etude_ajouter", path="/suivi/etude/ajouter", methods={"GET","HEAD","POST"})
+     * @Route(name="project_etude_ajouter", path="/suivi/etude/add", methods={"GET","HEAD","POST"})
      *
      * @param Request      $request
      * @param EtudeManager $etudeManager
@@ -193,7 +203,7 @@ class EtudeController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                if ((!$etude->isKnownProspect() && !$etude->getNewProspect()) || !$etude->getProspect()) {
+                if ((!$etude->isKnownProspect() && !$etude->getNewProspect()) || ($etude->isKnownProspect() && !$etude->getProspect())) {
                     $this->addFlash('danger', 'Vous devez définir un prospect');
 
                     return $this->render('Project/Etude/ajouter.html.twig', ['form' => $form->createView()]);

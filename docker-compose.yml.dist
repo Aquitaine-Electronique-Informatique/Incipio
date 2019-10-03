@@ -12,6 +12,10 @@ services:
             - database
             - mailer
         volumes:
+            - ./var/documents:/app/var/documents
+            - ./var/key_value_store:/app/var/key_value_store
+            - ./var/sessions:/app/var/sessions
+            - ./var/log:/app/var/log
             - .:/app
         restart: "no"
         ports:
@@ -28,7 +32,6 @@ services:
             # mysql
             - "./docker/mysql:/var/lib/mysql"
         restart: "no"
-
     mailer:
         build: ./docker/mail
         restart: "no"
