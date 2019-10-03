@@ -1,6 +1,7 @@
 twig:
-    default_path: '%kernel.project_dir%/templates'
-    debug: '%kernel.debug%'
-    strict_variables: '%kernel.debug%'
-    globals:
-        technical_to: '%env(TECHNICAL_TO)%'
+  default_path: "%kernel.project_dir%/templates"
+  debug: "%kernel.debug%"
+  strict_variables: "%kernel.debug%"
+  globals:
+    technical_to: "%env(TECHNICAL_TO)%"
+    role_voir_confidentiel: "%env(ROLE_VOIR_CONFIDENTIEL)%"
