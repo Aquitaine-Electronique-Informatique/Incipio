@@ -1,89 +1,74 @@
-var CACHE_NAME = 'my-site-cache-v1';
+var CACHE_NAME = "my-site-cache-v1";
 var urlsToCache = [
-    '/css/AdminLTE.min.css',
-    '/bootstrap/css/bootstrap.min.css',
-    '/css/chartist/bootstrap-slider.min.css',
-    '/css/jquery-ui-1.10.0.custom.min.css',
-    '/css/custom.css',
-    '/font-awesome/4.7.0/css/font-awesome.min.css',
-    '/js/jquery-1.12.0.min.js',
-    '/js/jquery-ui-1.10.0.custom.min.js',
-    '/js/jquery.ui.datepicker-fr.js',
-    '/js/select2.min.js',
-    '/js/app.min.js',
-    '/js/bootboxjs.min.js',
-    '/css/skin-n7c.min.css',
-    '/css/callouts.css',
-    '/css/select2.css',
-    '/css/fullcalendar.min.css',
-    '/js/fullcalendar/lib/moment.min.js',
-    '/js/fullcalendar/fullcalendar.min.js',
-    '/js/fullcalendar/locale/fr.js',
-    '/js/fullcalendar/gcal.js',
-    '/js/bootboxjs.min.js',
-
+  "/css/AdminLTE.min.css",
+  "/bootstrap/css/bootstrap.min.css",
+  "/css/chartist/bootstrap-slider.min.css",
+  "/css/jquery-ui-1.10.0.custom.min.css",
+  "/css/custom.css",
+  "/js/jquery.ui.datepicker-fr.js",
+  "/js/select2.min.js",
+  "/js/app.min.js",
+  "/js/bootboxjs.min.js",
+  "/css/skin-n7c.min.css",
+  "/css/select2.css",
+  "/css/fullcalendar.min.css",
+  "/js/fullcalendar/lib/moment.min.js",
+  "/js/fullcalendar/fullcalendar.min.js",
+  "/js/fullcalendar/locale/fr.js",
+  "/js/fullcalendar/gcal.js"
 ];
 
-
-
-self.addEventListener('install', function (event) {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(function (cache) {
-                console.log('Opened cache');
-                return cache.addAll(urlsToCache);
-            })
-    );
+self.addEventListener("install", function(event) {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(function(cache) {
+      console.log("Opened cache");
+      return cache.addAll(urlsToCache);
+    })
+  );
 });
 
-self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        caches.match(event.request)
-            .then(function (response) {
-                // Cache hit - return response
-                if (response) {
-                    return response;
-                }
+self.addEventListener("fetch", function(event) {
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      // Cache hit - return response
+      if (response) {
+        return response;
+      }
 
-                return fetch(event.request).then(
-                    function (response) {
-                        // Check if we received a valid response
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
-                            return response;
-                        }
+      return fetch(event.request).then(function(response) {
+        // Check if we received a valid response
+        if (!response || response.status !== 200 || response.type !== "basic") {
+          return response;
+        }
 
-                        // IMPORTANT: Clone the response. A response is a stream
-                        // and because we want the browser to consume the response
-                        // as well as the cache consuming the response, we need
-                        // to clone it so we have two streams.
-                        var responseToCache = response.clone();
+        // IMPORTANT: Clone the response. A response is a stream
+        // and because we want the browser to consume the response
+        // as well as the cache consuming the response, we need
+        // to clone it so we have two streams.
+        var responseToCache = response.clone();
 
-                        caches.open(CACHE_NAME)
-                            .then(function (cache) {
-                                cache.put(event.request, responseToCache);
-                            });
+        caches.open(CACHE_NAME).then(function(cache) {
+          cache.put(event.request, responseToCache);
+        });
 
-                        return response;
-                    }
-                );
-            })
-    );
+        return response;
+      });
+    })
+  );
 });
 
-self.addEventListener('activate', function(event) {
+self.addEventListener("activate", function(event) {
+  var cacheWhitelist = ["pages-cache-v1", "blog-posts-cache-v1"];
 
-    var cacheWhitelist = ['pages-cache-v1', 'blog-posts-cache-v1'];
-  
-    event.waitUntil(
-      caches.keys().then(function(cacheNames) {
-        return Promise.all(
-          cacheNames.map(function(cacheName) {
-            if (cacheWhitelist.indexOf(cacheName) === -1) {
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-    );
-  });
-  
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});

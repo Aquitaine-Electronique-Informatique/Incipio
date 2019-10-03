@@ -1,0 +1,15 @@
+/* Quality Slide */
+
+.slider-header {
+    width: 100%;
+}
+.slider-header .slider-title {
+    display:inline-block;
+    margin: 0 15px;
+}
+.slider-body .item {
+    display: none;
+}
+.slider-body .item.active {
+    display:inherit;
+}
