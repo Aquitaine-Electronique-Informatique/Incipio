@@ -28,13 +28,12 @@
             </li>
             <!-- Menu Footer-->
             <li class="user-footer">
-                <div class="pull-left">
-                    <a href="{{ path('fos_user_change_password') }}" class="btn btn-default btn-flat">{{ 'dashboard.motdepasse_modifier'|trans({}, 'dashboard')|raw }}</a>
-                </div>
-                <div class="pull-right">
-                    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-default btn-flat">{{ 'dashboard.deconnexion'|trans({}, 'dashboard') }}</a>
-                </div>
+                <a href="{{ path('fos_user_change_password') }}" class="btn btn-default btn-flat">{{ 'dashboard.motdepasse_modifier'|trans({}, 'dashboard')|raw }}</a>
             </li>
+            <li class="user-footer">
+                <a href="{{ path('fos_user_security_logout') }}" class="btn btn-default btn-flat">{{ 'dashboard.deconnexion'|trans({}, 'dashboard') }}</a>
+            </li>
+
         </ul>
     </li>
 </ul>
