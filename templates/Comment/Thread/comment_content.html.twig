@@ -12,7 +12,7 @@
                     {% else %}
                         {{ comment.authorName }}
                     {% endif %}
-                </span> - {{ comment.createdAt|date }}
+                </span> - {{ comment.createdAt|date('t M Y - H:i') }}
                 {% endblock fos_comment_comment_metas_authorline %}
 
                 {% block fos_comment_comment_metas_edit %}
