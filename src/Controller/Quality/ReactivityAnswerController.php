@@ -27,17 +27,17 @@ class ReactivityAnswerController extends Controller
         if ($current_question == NULL) 
         {
             $this->addFlash('info', "Aucune question de réactivité n'est en cours");
-            return $this->redirectToRoute('Mgate_dashboard_homepage', []);
+            return $this->redirectToRoute('dashboard_homepage', []);
         }
         if (count($member_answers) != 0) 
         {
             $this->addFlash('info', "Vous avez déjà répondu à la question de réactivité");
-            return $this->redirectToRoute('Mgate_dashboard_homepage', []);
+            return $this->redirectToRoute('dashboard_homepage', []);
         }
         if (date_diff($current_question->getAskedAt(), new DateTime("now"))->d >= 1 && $member_answers->count() == 0) 
         {
             $this->addFlash('danger', "Trop tard ! Vous avez été trop lent à répondre !");
-            return $this->redirectToRoute('Mgate_dashboard_homepage', []);
+            return $this->redirectToRoute('dashboard_homepage', []);
         }
         
         $reactivity_answer = new ReactivityAnswer();
@@ -52,7 +52,7 @@ class ReactivityAnswerController extends Controller
                 $em->flush();
                 
                 $this->addFlash('success', "Votre réponse a bien été prise en compte");
-                return $this->redirectToRoute('Mgate_dashboard_homepage', []);
+                return $this->redirectToRoute('dashboard_homepage', []);
             }
         }
 
@@ -61,7 +61,7 @@ class ReactivityAnswerController extends Controller
     }
 
     /**
-     * @Security("has_role('ROLE_QUALITE')")
+     * @Security("has_role('ROLE_QUALITE') || has_role('ROLE_ADMIN')")
      */
     public function validateAnswer($id)
     {
@@ -74,6 +74,6 @@ class ReactivityAnswerController extends Controller
         $em->flush();
 
         $this->addFlash('success', $success_message);
-        return $this->redirectToRoute('AEI_quality_admin_reactivity', []);
+        return $this->redirectToRoute('quality_admin_reactivity', []);
     }
 }

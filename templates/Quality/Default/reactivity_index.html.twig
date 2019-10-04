@@ -9,10 +9,10 @@
 <div class="row">
     <div class="col-sm-12">
 
-        {{ include('AEIQualityBundle:Default:current_question.html.twig') }}
-    
+        {{ include('Quality:Default:current_question.html.twig') }}
+
         {% if displayQuestionForm %}
-            <a class="btn btn-success" href="{{path('AEI_quality_new_reactivity_question')}}"> Envoyer une nouvelle question de réactivité</a>
+            <a class="btn btn-success" href="{{ path('quality_new_reactivity_question') }}"> Envoyer une nouvelle question de réactivité</a>
         {% endif %}
 
         <div class="box box-info">
@@ -47,7 +47,7 @@
                         </td>
                         <td>
                             {% if answer.isValidated() == 0 %}
-                            <a href='{{path('AEI_quality_validate_answer', {'id': answer.id})}}'><i class='fa fa-check'></i>
+                            <a href='{{path('quality_validate_answer', {'id': answer.id})}}'><i class='fa fa-check'></i>
                                 Valider</a>
                             {% else %}
                             <i class="fa fa-check-circle"></i>

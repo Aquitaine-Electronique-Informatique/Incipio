@@ -26,12 +26,12 @@ class MoodAnswerController extends Controller
         if ($current_question == NULL) 
         {
             $this->addFlash('info', "Aucune question de moral n'est en cours");
-            return $this->redirectToRoute('Mgate_dashboard_homepage', []);
+            return $this->redirectToRoute('dashboard_homepage', []);
         } 
         if (count($member_answers) != 0) 
         {
             $this->addFlash('info', "Vous avez déjà répondu à la question de moral");
-            return $this->redirectToRoute('Mgate_dashboard_homepage', []);
+            return $this->redirectToRoute('dashboard_homepage', []);
         }
 
         $mood_answer = new MoodAnswer();
@@ -47,7 +47,7 @@ class MoodAnswerController extends Controller
                 $em->flush();
 
                 $this->addFlash('success', "Votre réponse a bien été prise en compte");
-                return $this->redirectToRoute('Mgate_dashboard_homepage', []);
+                return $this->redirectToRoute('dashboard_homepage', []);
             }
         }
 

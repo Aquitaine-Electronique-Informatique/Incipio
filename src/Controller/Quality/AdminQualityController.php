@@ -209,7 +209,7 @@ class AdminQualityController extends Controller
         $this->get('mailer')->send($message);
         
         $this->addFlash('success', $success_message);
-        return $this->redirectToRoute('AEI_quality_admin_mood', []);
+        return $this->redirectToRoute('quality_admin_mood', []);
 
     }
 
@@ -251,7 +251,7 @@ class AdminQualityController extends Controller
             }
             $this->addFlash('success', $success_message);        
         }
-        return $this->redirectToRoute('AEI_quality_admin_reactivity', []);
+        return $this->redirectToRoute('quality_admin_reactivity', []);
     }
 
     /**
@@ -285,7 +285,7 @@ class AdminQualityController extends Controller
             }
             $this->addFlash('success', $success_message);        
         }
-        return $this->redirectToRoute('AEI_quality_admin_mood', []);
+        return $this->redirectToRoute('quality_admin_mood', []);
     }
 
     public function createPoleStat($current_prom, $month, $question, $pole, $no_answer, $bad_answer, $good_answer) 

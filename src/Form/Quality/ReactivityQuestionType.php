@@ -36,6 +36,6 @@ class ReactivityQuestionType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'AEI_qualitybundle_reactivity_question';
+        return 'qualitybundle_reactivity_question';
     }
 }
