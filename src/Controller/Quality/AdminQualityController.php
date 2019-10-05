@@ -123,6 +123,7 @@ class AdminQualityController extends Controller
 
     /**
      * @Security("has_role('ROLE_QUALITE')")
+     * @Route("/reactivity/new_question", name="quality_new_reactivity_question", methods={"GET"})
      */
     public function newReactivityQuestion(Request $request)
     {

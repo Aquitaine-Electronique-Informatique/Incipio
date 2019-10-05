@@ -1,4 +1,4 @@
-{% extends "Quality\layout.html.twig" %}
+{% extends "Quality/layout.html.twig" %}
 
 {% block content_title %}
     {{ 'dashboard.qualite'|trans({}, 'dashboard') }}
@@ -6,7 +6,7 @@
 
 {% block content_bundle %}
 
-    {{ include('AEIQualityBundle:Default:current_question.html.twig') }}
+    {{ include('Quality/Default/current_question.html.twig') }}
 
     <div class="box box-danger">
         <div class="box-header">
