@@ -28,7 +28,11 @@
         </div>
 
         {% if displayQuestionForm %}
-            <a class="btn btn-success" href="{{path('quality_new_mood_question')}}"> Envoyer une nouvelle question de moral</a>
+            <a class="btn btn-success" href="{{path('quality_new_mood_question')}}" style="margin-bottom: 10px;"> Envoyer une nouvelle question de moral</a>
+        {% endif %}
+
+        {% if canGenerate %}
+            <a class="btn btn-info" href="{{ path('quality_mood_generate_stats') }}" style="margin-bottom: 10px;"> Générer les statistiques de ce mois</a>
         {% endif %}
 
         <div class="box box-info">

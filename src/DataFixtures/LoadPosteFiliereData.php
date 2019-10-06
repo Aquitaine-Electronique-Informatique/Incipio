@@ -58,18 +58,22 @@ class LoadPosteFiliereData extends Fixture
         $info = new Filiere();
         $info->setNom('Informatique');
         $info->setDescription("Filière informatique de l'ENSEIRB-MATMECA.");
+        $manager->persist($info);
 
         $matmeca = new Filiere();
         $matmeca->setNom('MatMéca');
         $matmeca->setDescription("Filière mathématiques et mécanique de l'ENSEIRB-MATMECA.");
+        $manager->persist($matmeca);
 
         $elec = new Filiere();
         $elec->setNom('Électronique');
         $elec->setDescription("Filière électronique de l'ENSEIRB-MATMECA.");
+        $manager->persist($elec);
 
         $telecom = new Filiere();
         $telecom->setNom('Télécommunications');
         $telecom->setDescription("Filière télécommunications de l'ENSEIRB-MATMECA.");
+        $manager->persist($telecom);
 
         $manager->flush();
     }

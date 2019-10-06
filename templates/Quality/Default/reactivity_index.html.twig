@@ -15,6 +15,10 @@
             <a class="btn btn-success" href="{{ path('quality_new_reactivity_question') }}" style="margin-bottom: 10px;"> Envoyer une nouvelle question de réactivité</a>
         {% endif %}
 
+        {% if canGenerate %}
+            <a class="btn btn-info" href="{{ path('quality_reactivity_generate_stats') }}" style="margin-bottom: 10px;"> Générer les statistiques de ce mois</a>
+        {% endif %}
+
         <div class="box box-info">
             <div class="box-header">
                 <i class="fa fa-check"></i>

@@ -15,6 +15,7 @@ use App\Entity\Quality\MoodStat;
 use App\Form\Quality\ReactivityQuestionType;
 use App\Entity\Personne\Pole;
 use App\Entity\Personne\Membre;
+use App\Service\Quality\MoodReasons;
 use DateInterval;
 
 class AdminQualityController extends Controller
@@ -51,13 +52,13 @@ class AdminQualityController extends Controller
      * @Security("has_role('ROLE_QUALITE')")
      * @Route("/mood/admin", name="quality_mood_admin", methods={"GET"})
      */
-    public function moodIndex()
+    public function moodIndex(MoodReasons $mood_service)
     {
         $em = $this->getDoctrine()->getManager();
         $current_question = $em->getRepository(MoodQuestion::class)->findOneBy([], ['id' => 'desc']);
         $questions = $this->processMoodStats($em->getRepository(MoodQuestion::class)->findAll([], ['date' => 'asc']));
         $pole_names = $this->processPoleNames();
-        $mood_reasons = $this->get('mood_reasons')->getReasons();
+        $mood_reasons = $mood_service->getReasons();
         $isAdmin = true;
         $canGenerate = false;
         $questionOngoing = false;
@@ -123,7 +124,7 @@ class AdminQualityController extends Controller
 
     /**
      * @Security("has_role('ROLE_QUALITE')")
-     * @Route("/reactivity/new_question", name="quality_new_reactivity_question", methods={"GET"})
+     * @Route("/reactivity/new_question", name="quality_new_reactivity_question", methods={"GET", "POST"})
      */
     public function newReactivityQuestion(Request $request)
     {
@@ -144,7 +145,7 @@ class AdminQualityController extends Controller
                 $members_count = count($members);
                 $i = 0;
                 foreach ($members as $key => $member) {
-		    if ($i == 0)
+		            if ($i == 0)
                         $to = $member->getEmailEMSE();
                     else 
                         $bcc[] = $member->getEmailEMSE();
@@ -176,6 +177,7 @@ class AdminQualityController extends Controller
 
     /**
      * @Security("has_role('ROLE_QUALITE')")
+     * @Route("/mood/new_question", name="quality_new_mood_question", methods={"GET", "POST"})
      */
     public function newMoodQuestion() 
     {
@@ -216,10 +218,12 @@ class AdminQualityController extends Controller
 
     /**
      * @Security("has_role('ROLE_QUALITE')")
+     * @Route("/rectivity/generate_stats", name="quality_reactivity_generate_stats", methods={"GET"})
      */
     public function generateReactivityStats($id)
     {
         $success_message = 'Les statistiques de réactivité de ce mois ont bien été générées';
+        $warning_message = 'Les statistiques de réactivité de ce mois ont déjà été générées';
 
         $em = $this->getDoctrine()->getManager();
         $question = $em->getRepository(ReactivityQuestion::class)->find($id);
@@ -252,15 +256,20 @@ class AdminQualityController extends Controller
             }
             $this->addFlash('success', $success_message);        
         }
+        else {
+            $this->addFlash('warning', $warning_message);
+        }
         return $this->redirectToRoute('quality_admin_reactivity', []);
     }
 
     /**
      * @Security("has_role('ROLE_QUALITE')")
+     * @Route("/mood/generate_stats", name="quality_mood_generate_stats", methods={"GET"})
      */
     public function generateMoodStats($id)
     {
         $success_message = 'Les statistiques de moral de ce mois ont bien été générées';
+        $warning_message = 'Les statistiques de moral de ce mois ont déjà été générées';
 
         $em = $this->getDoctrine()->getManager();
         $question = $em->getRepository(MoodQuestion::class)->find($id);
@@ -285,6 +294,9 @@ class AdminQualityController extends Controller
                 $this->createMoodStat($current_prom, $month, $question, $pole, $no_answer * 100, $medium_mood * 10, $good_answer * 100);
             }
             $this->addFlash('success', $success_message);        
+        }
+        else {
+            $this->addFlash('warning', $warning_message);
         }
         return $this->redirectToRoute('quality_admin_mood', []);
     }
