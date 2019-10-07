@@ -1,0 +1,43 @@
+{% extends "Publish/layout.html.twig" %}
+
+{% block title %}
+    Liste des Documents - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    Document : <strong>{{ doc.name }}</strong>
+{% endblock %}
+
+{% block content_bundle %}
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Champs</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Auteur</td>
+            <td>{{ doc.author ? doc.author.prenomNom : "Undefined" }}</td>
+        </tr>
+        <tr>
+            <td>Size</td>
+            <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s') }}</td>
+        </tr>
+        <tr>
+            <td>Relation</td>
+            <td>{{ doc.relation }}</td>
+        </tr>
+        <tr>
+            <td>Membre</td>
+            <td>{{ doc.relation.membre ? doc.relation.membre : "Undefined" }}</td>
+        </tr>
+        <tr>
+            <td>Etude</td>
+            <td>{{ doc.relation.etude ? doc.relation.etude : "Undefined" }}</td>
+        </tr>
+    </table>
+{% endblock %}

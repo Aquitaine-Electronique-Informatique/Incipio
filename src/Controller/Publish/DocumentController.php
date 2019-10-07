@@ -50,13 +50,31 @@ class DocumentController extends AbstractController
 
         return $this->render('Publish/Document/index.html.twig', [
             'docs' => $entities,
-            'totalSize' => $totalSize,
+            'totalSize' => $totalSize
         ]);
     }
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_document_voir", path="/Documents/show/{id}", methods={"GET","HEAD"})
+     *
+     *  @param int $id
+     *
+     */
+    public function voir(int $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $doc = $em->getRepository(Document::class)->find($id);
+
+        return $this->render('Publish/Document/voir.html.twig', [
+            'doc' => $doc
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="publish_document_download", path="/Documents/download/{id}", methods={"GET","HEAD"})
      *
      * @param Document        $documentType (ParamConverter) The document to be downloaded
      * @param KernelInterface $kernel
@@ -65,16 +83,28 @@ class DocumentController extends AbstractController
      *
      * @throws \Exception
      */
-    public function voir(Document $documentType, KernelInterface $kernel)
+    public function download(Document $documentType, KernelInterface $kernel)
     {
-        $documentStoragePath = $kernel->getProjectDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
-        if (file_exists($documentStoragePath . '/' . $documentType->getPath())) {
-            $response = new BinaryFileResponse($documentStoragePath . '/' . $documentType->getPath());
-            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+        $documentStoragePath =
+            $kernel->getProjectDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
+        if (
+            file_exists($documentStoragePath . '/' . $documentType->getPath())
+        ) {
+            $response = new BinaryFileResponse(
+                $documentStoragePath . '/' . $documentType->getPath()
+            );
+            $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT
+            );
 
             return $response;
         } else {
-            throw new \Exception($documentStoragePath . '/' . $documentType->getPath() . ' n\'existe pas');
+            throw new \Exception(
+                $documentStoragePath .
+                    '/' .
+                    $documentType->getPath() .
+                    ' n\'existe pas'
+            );
         }
     }
 
@@ -90,18 +120,31 @@ class DocumentController extends AbstractController
      *
      * @return Response
      */
-    public function uploadEtude(Request $request, Etude $etude, EtudePermissionChecker $permChecker,
-                                DocumentManager $documentManager,
-                                KernelInterface $kernel)
-    {
+    public function uploadEtude(
+        Request $request,
+        Etude $etude,
+        EtudePermissionChecker $permChecker,
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle !');
         }
 
-        if (!$response = $this->upload($request, false, ['etude' => $etude], $documentManager, $kernel)) {
+        if (
+            !($response = $this->upload(
+                $request,
+                false,
+                ['etude' => $etude],
+                $documentManager,
+                $kernel
+            ))
+        ) {
             $this->addFlash('success', 'Document mis en ligne');
 
-            return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+            return $this->redirectToRoute('project_etude_voir', [
+                'nom' => $etude->getNom()
+            ]);
         }
 
         return $response;
@@ -118,14 +161,28 @@ class DocumentController extends AbstractController
      *
      * @return bool|RedirectResponse|Response
      */
-    public function uploadEtudiant(Request $request, Membre $membre, DocumentManager $documentManager, KernelInterface $kernel)
-    {
+    public function uploadEtudiant(
+        Request $request,
+        Membre $membre,
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
         $options['etudiant'] = $membre;
 
-        if (!$response = $this->upload($request, false, $options, $documentManager, $kernel)) {
+        if (
+            !($response = $this->upload(
+                $request,
+                false,
+                $options,
+                $documentManager,
+                $kernel
+            ))
+        ) {
             $this->addFlash('success', 'Document mis en ligne');
 
-            return $this->redirectToRoute('personne_membre_voir', ['id' => $membre->getId()]);
+            return $this->redirectToRoute('personne_membre_voir', [
+                'id' => $membre->getId()
+            ]);
         }
 
         return $response;
@@ -154,9 +211,20 @@ class DocumentController extends AbstractController
      *
      * @return Response
      */
-    public function uploadDoctype(Request $request, DocumentManager $documentManager, KernelInterface $kernel)
-    {
-        if (!$response = $this->upload($request, true, [], $documentManager, $kernel)) {
+    public function uploadDoctype(
+        Request $request,
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
+        if (
+            !($response = $this->upload(
+                $request,
+                true,
+                [],
+                $documentManager,
+                $kernel
+            ))
+        ) {
             // Si tout est ok
             return $this->redirectToRoute('publish_documenttype_index');
         } else {
@@ -178,7 +246,8 @@ class DocumentController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $doc->setProjectDir($kernel->getProjectDir());
 
-        if ($doc->getRelation()) { // Cascade sucks
+        if ($doc->getRelation()) {
+            // Cascade sucks
             $relation = $doc->getRelation()->setDocument();
             $doc->setRelation(null);
             $em->remove($relation);
@@ -191,9 +260,13 @@ class DocumentController extends AbstractController
         return $this->redirectToRoute('publish_documenttype_index');
     }
 
-    private function upload(Request $request, $deleteIfExist = false, $options = [], DocumentManager $documentManager,
-                            KernelInterface $kernel)
-    {
+    private function upload(
+        Request $request,
+        $deleteIfExist = false,
+        $options = [],
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
         $document = new Document();
         $document->setProjectDir($kernel->getProjectDir());
         if (count($options)) {
@@ -214,12 +287,18 @@ class DocumentController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $documentManager->uploadDocument($document, null, $deleteIfExist);
+                $documentManager->uploadDocument(
+                    $document,
+                    null,
+                    $deleteIfExist
+                );
 
                 return false;
             }
         }
 
-        return $this->render('Publish/Document/upload.html.twig', ['form' => $form->createView()]);
+        return $this->render('Publish/Document/upload.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }
