@@ -64,7 +64,7 @@ along with Incipio as the file LICENSE.  If not, see <http://www.gnu.org/license
                 {% if app.user is not empty and  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     <a href="{{ path('dashboard_homepage') }}" class="logo">
                         <span class="logo-mini"><b>{{ param('abbr') }}</b></span>
-                        <span class="logo-lg">My {{ param('abbr') }}</span>
+                        <span class="logo-lg">{{ param('abbr') }}</span>
                     </a>
                     <nav class="navbar navbar-static-top" role="navigation">
                         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
