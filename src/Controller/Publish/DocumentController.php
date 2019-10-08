@@ -301,4 +301,87 @@ class DocumentController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Security("has_role('ROLE_QUALITE') || has_role('ROLE_SUIVEUR')")
+     * @Route("/Documents/notify_qualite/{id} ", name="relecture_notify_qualite", methods={"GET", "POST"})
+     */
+    public function notifyQualite(
+        Request $request,
+        Document $doc,
+        \Swift_Mailer $mailer
+    ) {
+        $suiveurQualite = $doc
+            ->getRelation()
+            ->getEtude()
+            ->getSuiveurQualite();
+        $success_message = "Le mail a été envoyé";
+        if ($suiveurQualite) {
+            $to = $suiveurQualite->getEmail();
+            $message = (new \Swift_Message('Notification Qualite'))
+                ->setFrom('robot@junior-aei.com')
+                ->setTo($to)
+                ->setBody(
+                    $this->renderView('Relecture/Mail/mailQualite.html.twig', [
+                        'doc' => $doc
+                    ]),
+                    'text/html'
+                );
+
+            $mailer->send($message);
+
+            $this->addFlash('success', $success_message);
+        } else {
+            $this->addFlash(
+                'warning',
+                "Il n'y a pas de suiveur qualite pour cette etude"
+            );
+        }
+
+        return $this->render('Publish/Document/voir.html.twig', [
+            'doc' => $doc
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_QUALITE') || has_role('ROLE_SUIVEUR')")
+     * @Route("/Documents/notify_etude/{id} ", name="relecture_notify_etude", methods={"GET", "POST"})
+     */
+    public function notifyEtude(
+        Request $request,
+        Document $doc,
+        \Swift_Mailer $mailer
+    ) {
+        $success_message = "Le mail a été envoyé";
+        $suiveur = $doc
+            ->getRelation()
+            ->getEtude()
+            ->getSuiveur();
+        if ($suiveur) {
+            $to = $suiveur->getEmail();
+
+            $message = (new \Swift_Message('Notification Etude'))
+                ->setFrom('robot@junior-aei.com')
+                ->setTo($to)
+                ->setBody(
+                    $this->renderView('Relecture/Mail/mailEtude.html.twig', [
+                        'doc' => $doc
+                    ]),
+                    'text/html'
+                );
+
+            $mailer->send($message);
+
+            $this->addFlash('success', $success_message);
+        } else {
+            $this->addFlash(
+                'warning',
+                "Il n'y a pas de suiveur pour cette etude"
+            );
+        }
+
+        return $this->render('Publish/Document/voir.html.twig', [
+            'doc' => $doc
+        ]);
+    }
 }

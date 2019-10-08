@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content_title %}
-    Document : <strong>{{ doc.name }}</strong>
+    Document : <strong>{{ doc.name ? doc.name : "Undefined" }}</strong>
 {% endblock %}
 
 {% block content_bundle %}
@@ -42,15 +42,19 @@
     </table>
 
     <div class="row">
+        {% if is_granted('ROLE_SUIVEUR') %}
         <div class="col-md-2 col-xs-4">
-            <form action="" method="post">
+            <form action="{{ path('relecture_notify_qualite', {'id': doc.id}) }}" method="post">
                 <input class="btn btn-success" type="submit" value="Notifier chargé Qualité"/>
             </form>
         </div>
+        {% endif %}
+        {% if is_granted('ROLE_QUALITE') %}
         <div class="col-md-2 col-xs-4">
-            <form action="" method="post">
+            <form action="{{ path('relecture_notify_etude', {'id': doc.id}) }}" method="post">
                 <input class="btn btn-success" type="submit" value="Notifier chargé Étude"/>
             </form>
         </div>
+        {% endif %}
     </div>
 {% endblock %}
