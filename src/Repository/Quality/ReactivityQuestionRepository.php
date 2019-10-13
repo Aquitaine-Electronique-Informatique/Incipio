@@ -12,9 +12,8 @@ class ReactivityQuestionRepository extends EntityRepository
         $query = $this->_em->createQueryBuilder();
         $query->select('p');
         $query->from(ReactivityQuestion::class, 'p');
-        $query->where('p.reactivity_question = :id');
+        $query->where('p.id = :id');
         $query->setParameter('id', $id);
         return count($query->getQuery()->getResult()) > 0;
     }
-
 }
