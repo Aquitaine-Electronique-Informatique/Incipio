@@ -14,7 +14,7 @@ RUN buildDeps=" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         $buildDeps \
-        libicu63 \
+        libicu-dev \
         zlib1g \
         libzip4 \
         git \
