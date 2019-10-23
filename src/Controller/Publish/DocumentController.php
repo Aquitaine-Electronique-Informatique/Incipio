@@ -152,6 +152,51 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="publish_document_reuploadEtude", path="/Documents/Reupload/Etude/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @param Request                $request
+     * @param Etude                  $etude
+     * @param EtudePermissionChecker $permChecker
+     * @param DocumentManager        $documentManager
+     * @param KernelInterface        $kernel
+     *
+     * @return Response
+     */
+    public function reuploadEtude(
+        Request $request,
+        Document $doc,
+        EtudePermissionChecker $permChecker,
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
+        $etude = $doc->getRelation()->getEtude();
+
+        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
+            throw new AccessDeniedException('Cette étude est confidentielle !');
+        }
+
+        if (
+            !($response = $this->reupload(
+                $request,
+                false,
+                ['etude' => $etude],
+                $documentManager,
+                $kernel,
+                $doc
+            ))
+        ) {
+            $this->addFlash('success', 'Document mis en ligne');
+
+            return $this->redirectToRoute('project_etude_voir', [
+                'nom' => $etude->getNom()
+            ]);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_document_uploadEtudiant", path="/Documents/Upload/Etudiant/{id}", methods={"GET","HEAD","POST"})
      *
      * @param Request         $request
@@ -290,6 +335,38 @@ class DocumentController extends AbstractController
                 $documentManager->uploadDocument(
                     $document,
                     null,
+                    $deleteIfExist
+                );
+
+                return false;
+            }
+        }
+
+        return $this->render('Publish/Document/upload.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    private function reupload(
+        Request $request,
+        $deleteIfExist = true,
+        $options = [],
+        DocumentManager $documentManager,
+        KernelInterface $kernel, 
+        Document $document
+    ) {
+        $document->setProjectDir($kernel->getProjectDir());
+        $relatedDocument = $document->getRelation();
+
+        $form = $this->createForm(DocumentType::class, $document, $options);
+
+        if ('POST' == $request->getMethod()) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $documentManager->uploadDocument(
+                    $document,
+                    $relatedDocument,
                     $deleteIfExist
                 );
 
