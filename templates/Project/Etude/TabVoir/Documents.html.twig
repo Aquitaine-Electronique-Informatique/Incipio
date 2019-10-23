@@ -17,7 +17,7 @@
     <tr>
         <th>{{ 'suivi.titre'|trans({}, 'project') }}</th>
         <th>{{ 'suivi.date_upload'|trans({}, 'project') }}</th>
-        <th>{{ 'suivi.mis_en_ligne_par'|trans({}, 'project') }}</th>
+        <th>{{ 'suivi.intervenants'|trans({}, 'project') }}</th>
         {% if is_granted('ROLE_SUIVEUR') %}
         <th>{{ 'suivi.action'|trans({}, 'project') }}</th>
         {% endif %}
@@ -27,7 +27,11 @@
     <tr>
         <td><a href="{{ path('publish_document_voir', {'id': doc.id}) }} ">{{ doc.name}}</a></td>
         <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
-        <td>{{ doc.author ? doc.author.prenomNom }}</td>
+        <td>
+	  {% if doc.relation.membre %}
+	    <a href="{{ path('personne_membre_voir', {'id': doc.relation.membre.id}) }}">{{ doc.relation.membre }}</a>
+	    {% endif %}
+	</td>
         {% if is_granted('ROLE_SUIVEUR') %}
           <td>
 	    <a title="Supprimer" href="{{ path('publish_document_delete', {'id' : doc.id })  }}">
