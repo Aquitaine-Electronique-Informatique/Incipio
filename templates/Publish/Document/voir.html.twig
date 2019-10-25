@@ -57,4 +57,10 @@
         </div>
         {% endif %}
     </div>
+
+    <div>
+	{% if doc.relation.thread|default('0') %}
+	    {% include 'Comment/Thread/async.html.twig' with {'id': doc.relation.thread.id, 'view': 'flat'} %}
+	{% endif %}
+    </div>
 {% endblock %}

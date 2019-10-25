@@ -11,6 +11,7 @@
 
 namespace App\Entity\Publish;
 
+use App\Entity\Comment\Thread;
 use App\Entity\Formation\Formation;
 use App\Entity\Personne\Membre;
 use App\Entity\Personne\Prospect;
@@ -63,6 +64,11 @@ class RelatedDocument
      */
     private $prospect;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Comment\Thread", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $thread;
     /**
      * Get id.
      *
@@ -196,5 +202,45 @@ class RelatedDocument
     public function __toString()
     {
         return 'RelatedDocument ' . $this->getId();
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function createThread(LifecycleEventArgs $args)
+    {
+        if (null === $this->getThread()) {
+            $em = $args->getObjectManager();
+            $t = new Thread();
+            $t->setId('related_document_' . $this->getId());
+            $t->setPermalink('fake');
+            $this->setThread($t);
+            $em->persist($t);
+            $em->flush();
+        }
+    }
+
+    /**
+     * Set thread.
+     *
+     * @param Thread $thread
+     *
+     * @return RelatedDocument
+     */
+    public function setThread(Thread $thread)
+    {
+        $this->thread = $thread;
+
+        return $this;
+    }
+
+    /**
+     * Get thread.
+     *
+     * @return Thread
+     */
+    public function getThread()
+    {
+        return $this->thread;
     }
 }
