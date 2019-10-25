@@ -1,0 +1,46 @@
+{% extends "Publish/layout.html.twig" %}
+
+{% block title %}
+    Liste des Documents - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    Liste des Documents à relire
+{% endblock %}
+
+{% block content_bundle %}
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Date d'upload</th>
+            <th>Titre</th>
+            <th>Taille</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for related in relateds | reverse %}
+	  <tr>
+	   <td>{{ related.document.uptime ? related.document.uptime | date('d/m/Y - H:i:s') }}</td>
+	    <td> <a href="{{ path('publish_document_voir', {'id': related.document.id}) }}">{{ related.document.name }}</a> </td>
+	    <td>{{ (related.document.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
+	    <td>
+	      {% if related.status == 0 %}
+		<span class="label label-info">En relecture</span>
+	      {% elseif related.status == 1 %}
+		<span class="label label-warning">A modifier</span>
+	      {% elseif related.status == 2 %}
+		<span class="label label-success">Validé</span>
+	      {% endif %}
+	    </td>
+	    <td>
+	      <a title="Télécharger" href="{{ path('publish_document_download', {'id' : related.document.id }) }}">
+		<i class="fa fa-cloud-download"></i>
+	      </a>
+	      <a title="Notifier Étude" href="{{ path('relecture_notify_etude', {'id' : related.document.id }) }}">
+		<i class="fa far fa-envelope"></i>
+	      </a>
+	    </td>
+	  </tr>
+	{% endfor %}
+    </table>
+{% endblock %}

@@ -109,6 +109,22 @@ class DocumentController extends AbstractController
         }
     }
 
+
+    /**
+     * @Security("has_role('ROLE_QUALITE')")
+     * @Route(name="document_relecture_list", path="/Quality/Documents", methods={"GET","HEAD"})
+     */
+    public function list_document_to_review()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository(RelatedDocument::class)->findBy(["status" => 0]);
+
+        return $this->render('Quality/Documents/index.html.twig', [
+            'relateds' => $entities,
+        ]);
+    }
+
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_document_uploadEtude", path="/Documents/Upload/Etude/{nom}", methods={"GET","HEAD","POST"})
