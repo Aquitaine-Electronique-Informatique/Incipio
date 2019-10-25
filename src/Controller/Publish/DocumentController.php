@@ -11,6 +11,7 @@
 
 namespace App\Controller\Publish;
 
+use App\Entity\Comment\Thread;
 use App\Entity\Formation\Formation;
 use App\Entity\Personne\Membre;
 use App\Entity\Project\Etude;
@@ -316,6 +317,7 @@ class DocumentController extends AbstractController
         $document->setProjectDir($kernel->getProjectDir());
         if (count($options)) {
             $relatedDocument = new RelatedDocument();
+            $relatedDocument->setStatus(0); // Should be reviewed
             $relatedDocument->setDocument($document);
             $document->setRelation($relatedDocument);
             if (array_key_exists('etude', $options)) {

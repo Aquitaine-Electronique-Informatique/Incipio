@@ -17,6 +17,7 @@ use App\Entity\Personne\Membre;
 use App\Entity\Personne\Prospect;
 use App\Entity\Project\Etude;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 
 /**
  * A related document is a join table between a document and objects in the application.
@@ -69,6 +70,12 @@ class RelatedDocument
      * @ORM\JoinColumn(nullable=true)
      */
     private $thread;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $status;
+
     /**
      * Get id.
      *
@@ -242,5 +249,29 @@ class RelatedDocument
     public function getThread()
     {
         return $this->thread;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set formation.
+     *
+     * @param int $status
+     *
+     * @return RelatedDocument
+     */
+    public function setStatus(int $status)
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }

@@ -18,6 +18,7 @@
         <th>{{ 'suivi.titre'|trans({}, 'project') }}</th>
         <th>{{ 'suivi.date_upload'|trans({}, 'project') }}</th>
         <th>{{ 'suivi.intervenants'|trans({}, 'project') }}</th>
+        <th>Status</th>
         {% if is_granted('ROLE_SUIVEUR') %}
         <th>{{ 'suivi.action'|trans({}, 'project') }}</th>
         {% endif %}
@@ -31,6 +32,15 @@
 	  {% if doc.relation.membre %}
 	    <a href="{{ path('personne_membre_voir', {'id': doc.relation.membre.id}) }}">{{ doc.relation.membre }}</a>
 	    {% endif %}
+	</td>
+	<td>
+	  {% if doc.relation.status == 0 %}
+	    <span class="label label-info">En relecture</span>
+	  {% elseif doc.relation.status == 1 %}
+	    <span class="label label-warning">A modifier</span>
+	  {% elseif doc.relation.status == 2 %}
+	    <span class="label label-success">Validé</span>
+	  {% endif %}
 	</td>
         {% if is_granted('ROLE_SUIVEUR') %}
           <td>
