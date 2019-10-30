@@ -51,7 +51,7 @@
                         </td>
                         <td>
                             {% if answer.isValidated() == 0 %}
-                            <a href='{{path('quality_validate_answer', {'id': answer.id})}}'><i class='fa fa-check'></i>
+                            <a href='{{path('quality_reactivity_validate_answer', {'id': answer.id})}}'><i class='fa fa-check'></i>
                                 Valider</a>
                             {% else %}
                             <i class="fa fa-check-circle"></i>
