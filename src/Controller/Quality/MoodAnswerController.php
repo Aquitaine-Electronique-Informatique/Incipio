@@ -9,13 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Quality\MoodQuestion;
 use App\Entity\Quality\MoodAnswer;
 use App\Form\Quality\MoodAnswerType;
+use App\Service\Quality\MoodReasons;
 
 class MoodAnswerController extends Controller
 {
     /**
-     * @Route("/mood/answer", name="quality_mood_answer", methods={"GET"})
+     * @Route("/mood/answer", name="quality_mood_answer", methods={"GET", "POST"})
      */
-    public function newMoodAnswer(Request $request) 
+    public function newMoodAnswer(Request $request, MoodReasons $mood_service) 
     {
         $em = $this->getDoctrine()->getManager();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -35,7 +36,7 @@ class MoodAnswerController extends Controller
         }
 
         $mood_answer = new MoodAnswer();
-        $reasons = $this->get('mood_reasons')->getReasons();
+        $reasons = $mood_service->getReasons();
         $form = $this->createForm(MoodAnswerType::class, $mood_answer, array('reasons' => $reasons));
 
         if ('POST' == $request->getMethod()) {

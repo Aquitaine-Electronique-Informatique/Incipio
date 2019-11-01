@@ -14,7 +14,7 @@ use App\Entity\Quality\ReactivityAnswer as ReactivityAnswer;
 class ReactivityAnswerController extends Controller
 {
     /**
-     * @Route("/reactivity/answer", name="quality_reactivity_answer", methods={"GET"})
+     * @Route("/reactivity/answer", name="quality_reactivity_answer", methods={"GET", "POST"})
      */
     public function newReactivityAnswer(Request $request) 
     {
@@ -62,8 +62,9 @@ class ReactivityAnswerController extends Controller
 
     /**
      * @Security("has_role('ROLE_QUALITE') || has_role('ROLE_ADMIN')")
+     * @Route("/reactivity/validate/{id}", name="quality_reactivity_validate_answer", methods={"GET"})
      */
-    public function validateAnswer($id)
+    public function validateAnswer(int $id)
     {
         $success_message = 'Réponse correctement validée';
 
@@ -74,6 +75,6 @@ class ReactivityAnswerController extends Controller
         $em->flush();
 
         $this->addFlash('success', $success_message);
-        return $this->redirectToRoute('quality_admin_reactivity', []);
+        return $this->redirectToRoute('quality_reactivity_admin', []);
     }
 }
