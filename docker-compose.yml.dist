@@ -29,7 +29,6 @@ services:
             MYSQL_USER: jeyser
             MYSQL_PASSWORD: jeyser
         volumes:
-            # mysql
             - "./docker/mysql:/var/lib/mysql"
         restart: "no"
     mailer:

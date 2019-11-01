@@ -22,7 +22,6 @@
 
     <!-- GESTION ASSOCIATIVE -->
     {% if is_granted('ROLE_SUIVEUR') %}
-
         <li>
             <a href="#">
                 <i class="icon-mini fa fa-book"></i>
@@ -188,9 +187,9 @@
                                 class="fa fa-credit-card"></span> {{ 'dashboard.factures'| trans }}</a>
                 </li>
                 <li><a href="{{ path('treso_BV_index') }}"><span
-                                class="fa fa-id-card-o"></span> {{ 'dashboard.bvs'| trans }}</a></li>
+                                class="fa fa-id-card-o"></span> {{ 'dashboard.bv'| trans }}</a></li>
                 <li><a href="{{ path('treso_NoteDeFrais_index') }}"><span
-                                class="fa fa-sticky-note-o"></span> {{ 'dashboard.nfs'| trans }}</a>
+                                class="fa fa-sticky-note-o"></span> {{ 'dashboard.nf'| trans }}</a>
                 </li>
                 <li class="divider"></li>
                 <li class="dropdown-header">{{ 'dashboard.tableaux_suivi'| trans }}</li>
@@ -198,7 +197,7 @@
                                 class="fa fa-barcode"></span> {{ 'dashboard.declaratif_tva'| trans }}
                     </a></li>
                 <li><a href="{{ path('treso_Declaratif_BRC') }}"><span
-                                class="fa fa-qrcode"></span> {{ 'dashboard.bordereau_cotisations'| trans }}
+                                class="fa fa-qrcode"></span> {{ 'dashboard.brc'| trans }}
                     </a></li>
                 <li>
                     <a href="{{ path('treso_urssaf', {'year': "now"|date('Y'), 'month': "now"|date('m')}) }}"><span
@@ -250,7 +249,7 @@
 
     <!-- PILOTAGE DE LA J.E. -->
     {% if is_granted('ROLE_CA') %}
-        <li class="">
+        <li>
             <a href="#">
                 <i class="icon-mini fa fa-paper-plane"></i>
                 <span class="nav-label">{{ 'dashboard.pilotage_je'| trans }}</span>
