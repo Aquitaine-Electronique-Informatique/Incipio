@@ -17,7 +17,7 @@
                         <p>Depuis le {{current_question.askedAt|date('d-m-Y à H:i')}}</p>
                         {% if isAdmin and canGenerate %}
                             <div class="col-xs-3">
-                                <button type="button" class="btn btn-success" {% if current_question.hasMoodStats() %}  disabled {% endif %} onClick="location.href='{{path('quality_generate_mood_stats', {'id': current_question.id})}}'"><i class='fa fa-table'></i> Générer statistiques</button>
+                                <button type="button" class="btn btn-success" {% if current_question.hasMoodStats() %}  disabled {% endif %} onClick="location.href='{{path('quality_mood_generate_stats', {'id': current_question.id})}}'"><i class='fa fa-table'></i> Générer statistiques</button>
                             </div>
                         {% endif %}
                     {% else %}
