@@ -10,57 +10,36 @@
 
 {% block content_bundle %}
 
-    <table class="table table-bordered table-striped">
-        <tr>
-            <th>Champs</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td>Auteur</td>
-            <td>{{ doc.author ? doc.author.prenomNom : "Undefined" }}</td>
-        </tr>
-        <tr>
-            <td>Size</td>
-            <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
-        </tr>
-        <tr>
-            <td>Date</td>
-            <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s') }}</td>
-        </tr>
-        <tr>
-            <td>Relation</td>
-            <td>{{ doc.relation }}</td>
-        </tr>
-        <tr>
-            <td>Membre</td>
-            <td>{{ doc.relation.membre ? doc.relation.membre : "Undefined" }}</td>
-        </tr>
-        <tr>
-            <td>Etude</td>
-            <td>{{ doc.relation.etude ? doc.relation.etude : "Undefined" }}</td>
-        </tr>
-    </table>
+    <button class="btn btn-secondary" style="width: 300px;">
+        <a href="#" class="list-group-item list-group-item-action active"> <strong>{{ doc.name ? doc.name : "Undefined" }}</strong> </a>
+        <a href="#" class="list-group-item list-group-item-action">{{ doc.author ? doc.author.prenomNom : "Undefined" }}</a>
+        <a href="#" class="list-group-item list-group-item-action">Taille <span class="badge badge-secondary">{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</span></a>
+        <a href="#" class="list-group-item list-group-item-action">Intervenant  <span class="badge badge-secondary">{{ doc.relation.membre ? doc.relation.membre : "Undefined" }}</span></a>
+        <a href="#" class="list-group-item list-group-item-action">Date <span class="badge badge-secondary">{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s') }}</span></a>
+        <a href="#" class="list-group-item list-group-item-action" tabindex="-1" aria-disabled="true">Etude <span class="badge badge-secondary">{{ doc.relation.etude ? doc.relation.etude : "Undefined" }}</span></a>
+    </button>
 
-    <div class="row">
+    <div class="btn-group" role="group" aria-label="Basic example">
         {% if is_granted('ROLE_SUIVEUR') %}
-        <div class="col-md-2 col-xs-4">
             <form action="{{ path('relecture_notify_qualite', {'id': doc.id}) }}" method="post">
                 <input class="btn btn-success" type="submit" value="Notifier chargé Qualité"/>
             </form>
-        </div>
+            <form action="{{ path('publish_document_delete', {'id': doc.id}) }} method="post">
+                <input class="btn btn-success" type="submit" value="Supprimer"/>
+            </form>
+            <form action="{{ path('publish_document_reuploadEtude', {'id': doc.id}) }} method="post">
+                <input class="btn btn-success" type="submit" value="Réuploader"/>
+            </form>
         {% endif %}
         {% if is_granted('ROLE_QUALITE') %}
-        <div class="col-md-2 col-xs-4">
             <form action="{{ path('relecture_notify_etude', {'id': doc.id}) }}" method="post">
                 <input class="btn btn-success" type="submit" value="Notifier chargé Étude"/>
             </form>
-        </div>
         {% endif %}
     </div>
-
     <div>
-	{% if doc.relation.thread|default('0') %}
-	    {% include 'Comment/Thread/async.html.twig' with {'id': doc.relation.thread.id, 'view': 'flat'} %}
-	{% endif %}
+    {% if doc.relation.thread|default('0') %}
+        {% include 'Comment/Thread/async.html.twig' with {'id': doc.relation.thread.id, 'view': 'flat'} %}
+    {% endif %}
     </div>
 {% endblock %}
