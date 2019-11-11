@@ -39,6 +39,12 @@
 	      <a title="Notifier Étude" href="{{ path('relecture_notify_etude', {'id' : related.document.id }) }}">
 		<i class="fa far fa-envelope"></i>
 	      </a>
+	      <a title="À modifier" href="{{ path('quality_mark_reviewed', {'id' : related.id }) }}">
+        <i class="fa far fa-times"></i>
+	      </a>
+	      <a title="Valider" href="{{ path('quality_mark_validated', {'id' : related.id }) }}">
+        <i class="fa far fa-check"></i>
+	      </a>
 	    </td>
 	  </tr>
 	{% endfor %}

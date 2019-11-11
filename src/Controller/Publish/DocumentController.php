@@ -109,7 +109,6 @@ class DocumentController extends AbstractController
         }
     }
 
-
     /**
      * @Security("has_role('ROLE_QUALITE')")
      * @Route(name="document_relecture_list", path="/Quality/Documents", methods={"GET","HEAD"})
@@ -118,10 +117,12 @@ class DocumentController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository(RelatedDocument::class)->findBy(["status" => 0]);
+        $entities = $em
+            ->getRepository(RelatedDocument::class)
+            ->findBy(["status" => 0]);
 
         return $this->render('Quality/Documents/index.html.twig', [
-            'relateds' => $entities,
+            'relateds' => $entities
         ]);
     }
 
@@ -370,11 +371,12 @@ class DocumentController extends AbstractController
         $deleteIfExist = true,
         $options = [],
         DocumentManager $documentManager,
-        KernelInterface $kernel, 
+        KernelInterface $kernel,
         Document $document
     ) {
         $document->setProjectDir($kernel->getProjectDir());
         $relatedDocument = $document->getRelation();
+        $relatedDocument->setStatus(0); // Should be reviewed
 
         $form = $this->createForm(DocumentType::class, $document, $options);
 
