@@ -65,31 +65,31 @@ class Prospect extends Adressable
     private $entite;
 
     /**
-    * @var bool
-    *
-    * @ORM\Column(name="chaud", type="boolean", options={"default" : true})
-    */
+     * @var bool
+     *
+     * @ORM\Column(name="chaud", type="boolean", options={"default" : true})
+     */
     private $chaud;
 
     /**
-    * @var bool
-    *
-    * @ORM\Column(name="direct", type="boolean", options={"default" : true})
-    */
+     * @var bool
+     *
+     * @ORM\Column(name="direct", type="boolean", options={"default" : true})
+     */
     private $direct;
 
     /**
-    * @Assert\DateTime
-    *
-    * @ORM\Column(name="date_rencontre", type="date", nullable=true)
-    */
+     * @Assert\DateTime
+     *
+     * @ORM\Column(name="date_rencontre", type="date", nullable=true)
+     */
     private $date_rencontre;
 
     /**
-    * @var int
-    *
-    * @ORM\Column(name="interet", type="integer", nullable=true)
-    */
+     * @var int
+     *
+     * @ORM\Column(name="interet", type="integer", nullable=true)
+     */
     private $interet;
 
     /**
@@ -247,8 +247,8 @@ class Prospect extends Adressable
             5 => 'Grand Groupe',
             6 => 'Ecole',
             7 => 'Administration',
-            8 => 'Junior-Entreprise',
-            ];
+            8 => 'Junior-Entreprise'
+        ];
     }
 
     public static function getEntiteChoiceAssert()
@@ -270,8 +270,9 @@ class Prospect extends Adressable
      * Renvoie si le prospect est "chaud" ou "froid"
      *
      * @return bool
-      */
-    public function getChaud(){
+     */
+    public function getChaud()
+    {
         return $this->chaud;
     }
 
@@ -280,8 +281,9 @@ class Prospect extends Adressable
      *
      * @param bool $chaud
      * @return bool
-      */
-    public function setChaud($chaud){
+     */
+    public function setChaud($chaud)
+    {
         $this->chaud = $chaud;
 
         return $this;
@@ -291,8 +293,9 @@ class Prospect extends Adressable
      * Renvoie si le prospect est "direct" ou "indirect"
      *
      * @return bool
-      */
-    public function getDirect(){
+     */
+    public function getDirect()
+    {
         return $this->direct;
     }
 
@@ -302,8 +305,9 @@ class Prospect extends Adressable
      *  @param boolean $direct
      *
      *  @return bool
-      */
-    public function setDirect($direct){
+     */
+    public function setDirect($direct)
+    {
         $this->direct = $direct;
 
         return $this;
@@ -314,7 +318,8 @@ class Prospect extends Adressable
      *
      *  @return DateTime
      */
-    public function getdate_rencontre(){
+    public function getDateRencontre()
+    {
         return $this->date_rencontre;
     }
 
@@ -325,7 +330,8 @@ class Prospect extends Adressable
      *
      * @return Prospect
      */
-    public function setDateRencontre($date){
+    public function setDateRencontre($date)
+    {
         $this->date_rencontre = $date;
 
         return $this;
@@ -336,7 +342,8 @@ class Prospect extends Adressable
      *
      *  @return int
      */
-    public function getInteret(){
+    public function getInteret()
+    {
         return $this->interet;
     }
 
@@ -346,9 +353,9 @@ class Prospect extends Adressable
      *  @param int $interet
      *  @return Prospect
      */
-    public function setInteret($interet){
+    public function setInteret($interet)
+    {
         $this->interet = $interet;
         return $this;
     }
-
 }
