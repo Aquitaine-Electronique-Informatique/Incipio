@@ -72,7 +72,7 @@ class MembreType extends AbstractType
                 'label' => 'Modifier la photo de profil du membre',
             ])
             ->add('formatPaiement', ChoiceType::class,
-                ['choices' => ['aucun' => 'aucun', 'cheque' => 'Chèque', 'especes' => 'Espèces'], 'required' => true])
+                ['choices' => ['aucun' => 'aucun', 'cheque' => 'Chèque', 'especes' => 'Espèces', 'lydia' => Lydia], 'required' => true])
             ->add('filiere', EntityType::class,
                 ['label' => 'Filiere',
                  'class' => Filiere::class,

@@ -206,7 +206,8 @@ class DocumentController extends AbstractController
             $this->addFlash('success', 'Document mis en ligne');
 
             return $this->redirectToRoute('project_etude_voir', [
-                'nom' => $etude->getNom()
+                'nom' => $etude->getNom(),
+                '_fragment' => 'tab5'
             ]);
         }
 
@@ -244,7 +245,8 @@ class DocumentController extends AbstractController
             $this->addFlash('success', 'Document mis en ligne');
 
             return $this->redirectToRoute('personne_membre_voir', [
-                'id' => $membre->getId()
+                'id' => $membre->getId(),
+                '_fragment' => 'tab2'
             ]);
         }
 
