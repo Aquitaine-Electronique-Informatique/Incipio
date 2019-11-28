@@ -10,21 +10,31 @@
 
 {% block content_bundle %}
 
-    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-    {% for field in form.children if field.vars.name != "_token" %}
-        <div class="form-group">
-            <div class="col-lg-3 col-xs-4">
-                {{ form_label(field) }}
-                {{ form_errors(field) }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                {{ form_start(form) }}
+                    {% for field in form.children if field.vars.name != "_token" %}
+                        <div class="form-group">
+                            {{ form_label(field) }} <br/>
+                            {{ form_errors(field) }}
+                            {{ form_widget(field, {'attr': {'class': (field is not iterable ? 'form-control': '')}}) }}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-warning">Mettre en ligne</button>
+                {{ form_end(form) }}
             </div>
-            <div class="col-lg-8">
-                {{ form_widget(field, {'attr': {'class': (field is not iterable ? 'form-control': '')}}) }}
+            <div class="col-md-7">
+                <ul class="list-group" style="width:60%">
+                    <li class="list-group-item active flex-fill">Check-liste upload</li>
+                    <li class="list-group-item flex-fill">Pagination</li>
+                    <li class="list-group-item flex-fill">Sommaire cohérent pour la CE</li>
+                    <li class="list-group-item flex-fill">Nom et adresse client/réa OK</li>
+                    <li class="list-group-item flex-fill">Date de validité de la CE d'un mois</li>
+                </ul>
             </div>
         </div>
-    {% endfor %}
-
-    <button type="submit" class="btn btn-warning">Mettre en ligne</button>
-    {{ form_end(form) }}
+    </div>
 {% endblock %}
 
 {% block javascript %}
