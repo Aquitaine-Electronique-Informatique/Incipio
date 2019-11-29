@@ -1,5 +1,5 @@
 <div class="fos_comment_comment_form_holder">
-    <form class="fos_comment_comment_edit_form" action="{{ url('fos_comment_put_thread_comments', {'id': comment.thread.id, 'commentId': comment.id}) }}" method="POST">
+    <form class="fos_comment_comment_edit_form" action="{{ path('fos_comment_put_thread_comments', {'id': comment.thread.id, 'commentId': comment.id}) }}" method="POST">
 
         {% block fos_comment_form_fields %}
             {{ form_errors(form) }}

@@ -1,5 +1,5 @@
 <div class="fos_comment_delete_form_holder">
-    <form class="fos_comment_delete_form" action="{{ url('fos_comment_patch_thread_comment_state', {'id': id, 'commentId': commentId}) }}" data-fos-comment-thread-id="{{ id }}" method="POST">
+    <form class="fos_comment_delete_form" action="{{ path('fos_comment_patch_thread_comment_state', {'id': id, 'commentId': commentId}) }}" data-fos-comment-thread-id="{{ id }}" method="POST">
 
         {% block fos_comment_form_fields %}
             {{ form_errors(form) }}
