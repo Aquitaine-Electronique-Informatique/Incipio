@@ -420,6 +420,7 @@ class DocumentController extends AbstractController
             $message = (new \Swift_Message('Notification Qualite'))
                 ->setFrom('robot@junior-aei.com')
                 ->setTo($to)
+                ->addTo('guillaume.vilas@junior-aei.com')
                 ->setBody(
                     $this->renderView('Relecture/Mail/mailQualite.html.twig', [
                         'doc' => $doc
