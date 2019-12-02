@@ -38,7 +38,7 @@
 	    <span class="label label-info">En relecture</span>
 	  {% elseif doc.relation.status == 1 %}
 	    <span class="label label-warning">A modifier</span>
-	  {% elseif doc.relation.status == 2 %}
+	  {% elseif doc.relation.status >= 2 %}
 	    <span class="label label-success">Validé</span>
 	  {% endif %}
 	</td>

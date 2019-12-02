@@ -56,7 +56,7 @@ class RelatedDocumentController extends AbstractController
     public function validate(RelatedDocument $relation)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $relation->setStatus(3);
+        $relation->setStatus(2);
         $em->flush();
         $this->addFlash('success', 'Document validé');
         return $this->redirectToRoute('document_relecture_list');
