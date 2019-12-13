@@ -24,6 +24,9 @@
             <form action="{{ path('relecture_notify_qualite', {'id': doc.id}) }}" method="post">
                 <input class="btn btn-success" type="submit" value="Notifier chargé Qualité"/>
             </form>
+            <form action="{{ path('publish_document_download', {'id': doc.id}) }}" method="get">
+                <input class="btn btn-success" type="submit" value="Télécharger"/>
+            </form>
             <form action="{{ path('publish_document_delete', {'id': doc.id}) }} method="post">
                 <input class="btn btn-success" type="submit" value="Supprimer"/>
             </form>

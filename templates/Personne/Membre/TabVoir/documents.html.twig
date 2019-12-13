@@ -39,9 +39,17 @@
                         <td><a href="{{ path('publish_document_voir', {'id': doc.id}) }} ">{{ doc.name}}</a></td>
                         <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
                         <td>{{ doc.author ? doc.author.prenomNom }}</td>
-                        {% if is_granted('ROLE_CA') %}
-                        <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i class="fa fa-times"></i></a></td>
-                        {% endif %}
+                        <td>
+                            {% if is_granted('ROLE_CA') %}
+                                <a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i class="fa fa-times"></i></a>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_SUIVEUR') %}
+                                <a title="Télécharger" href="{{ path('publish_document_download', {'id' : doc.id }) }}">
+                                    <i class="fa fa-cloud-download"></i>
+                                </a>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </table>
