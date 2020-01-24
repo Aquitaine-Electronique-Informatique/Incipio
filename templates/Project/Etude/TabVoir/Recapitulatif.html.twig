@@ -44,6 +44,12 @@
 					<th>{{ 'suivi.suiveur_qualite'|trans({}, 'project') }}</th>
 					<td>{% include "Project/Etude/Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveurQualite} %}</td>
 				</tr>
+				{% if etude.stateID == 0 %}
+				<tr>
+					<th>{{ 'suivi.suiveur_prospection'|trans({}, 'project') }}</th>
+					<td>{% include "Project/Etude/Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveurProspection} %}</td>
+				</tr>
+				{% endif %}
 				<tr>
 					<th>{{ 'suivi.description'|trans({}, 'project') }}</th>
 					<td>{{etude.description }}</td>

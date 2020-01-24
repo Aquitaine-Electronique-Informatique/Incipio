@@ -34,6 +34,8 @@ use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class EtudeController extends AbstractController
 {
+    const STATE_ID_EN_PROSPECTION = 0;
+
     const STATE_ID_EN_NEGOCIATION = 1;
 
     const STATE_ID_EN_COURS = 2;
@@ -60,24 +62,46 @@ class EtudeController extends AbstractController
      *
      * @return Response
      */
-    public function index(EtudeManager $etudeManager, string $roleVoirConfidentiel)
-    {
+    public function index(
+        EtudeManager $etudeManager,
+        string $roleVoirConfidentiel
+    ) {
         $MANDAT_MAX = $etudeManager->getMaxMandat();
         $MANDAT_MIN = $etudeManager->getMinMandat();
 
         $em = $this->getDoctrine()->getManager();
 
         //Etudes En Négociation : stateID = 1
-        $etudesEnNegociation = $em->getRepository(Etude::class)
-            ->getPipeline(['stateID' => self::STATE_ID_EN_NEGOCIATION], ['mandat' => 'DESC', 'num' => 'DESC']);
+        $etudesEnProspection = $em
+            ->getRepository(Etude::class)
+            ->getPipeline(
+                ['stateID' => self::STATE_ID_EN_PROSPECTION],
+                ['mandat' => 'DESC', 'num' => 'DESC']
+            );
+
+        //Etudes En Négociation : stateID = 1
+        $etudesEnNegociation = $em
+            ->getRepository(Etude::class)
+            ->getPipeline(
+                ['stateID' => self::STATE_ID_EN_NEGOCIATION],
+                ['mandat' => 'DESC', 'num' => 'DESC']
+            );
 
         //Etudes En Cours : stateID = 2
-        $etudesEnCours = $em->getRepository(Etude::class)
-            ->getPipeline(['stateID' => self::STATE_ID_EN_COURS], ['mandat' => 'DESC', 'num' => 'DESC']);
+        $etudesEnCours = $em
+            ->getRepository(Etude::class)
+            ->getPipeline(
+                ['stateID' => self::STATE_ID_EN_COURS],
+                ['mandat' => 'DESC', 'num' => 'DESC']
+            );
 
         //Etudes en pause : stateID = 3
-        $etudesEnPause = $em->getRepository(Etude::class)
-            ->getPipeline(['stateID' => self::STATE_ID_EN_PAUSE], ['mandat' => 'DESC', 'num' => 'DESC']);
+        $etudesEnPause = $em
+            ->getRepository(Etude::class)
+            ->getPipeline(
+                ['stateID' => self::STATE_ID_EN_PAUSE],
+                ['mandat' => 'DESC', 'num' => 'DESC']
+            );
 
         //Etudes Terminees et Avortees Chargée en Ajax dans getEtudesAsyncAction
         //On push des arrays vides pour avoir les menus déroulants
@@ -92,6 +116,7 @@ class EtudeController extends AbstractController
         $anneeCreation = $this->keyValueStore->get('anneeCreation');
 
         return $this->render('Project/Etude/index.html.twig', [
+            'etudesEnProspection' => $etudesEnProspection,
             'etudesEnNegociation' => $etudesEnNegociation,
             'etudesEnCours' => $etudesEnCours,
             'etudesEnPause' => $etudesEnPause,
@@ -120,21 +145,31 @@ class EtudeController extends AbstractController
             $mandat = intval($request->query->get('mandat'));
             $stateID = intval($request->query->get('stateID'));
 
-            if (!empty($mandat) && !empty($stateID)) { // works because state & mandat > 0
-                $etudes = $em->getRepository(Etude::class)->findBy(['stateID' => $stateID,
-                                                                    'mandat' => $mandat,
-                ], ['num' => 'DESC']);
+            if (!empty($mandat) && !empty($stateID)) {
+                // works because state & mandat > 0
+                $etudes = $em
+                    ->getRepository(Etude::class)
+                    ->findBy(
+                        ['stateID' => $stateID, 'mandat' => $mandat],
+                        ['num' => 'DESC']
+                    );
 
                 if (self::STATE_ID_TERMINEE == $stateID) {
-                    return $this->render('Project/Etude/Tab/EtudesTerminees.html.twig', [
-                        'etudes' => $etudes,
-                        'role_voir_confidentiel' => $roleVoirConfidentiel,
-                    ]);
+                    return $this->render(
+                        'Project/Etude/Tab/EtudesTerminees.html.twig',
+                        [
+                            'etudes' => $etudes,
+                            'role_voir_confidentiel' => $roleVoirConfidentiel
+                        ]
+                    );
                 } elseif (self::STATE_ID_AVORTEE == $stateID) {
-                    return $this->render('Project/Etude/Tab/EtudesAvortees.html.twig', [
-                        'etudes' => $etudes,
-                        'role_voir_confidentiel' => $roleVoirConfidentiel,
-                    ]);
+                    return $this->render(
+                        'Project/Etude/Tab/EtudesAvortees.html.twig',
+                        [
+                            'etudes' => $etudes,
+                            'role_voir_confidentiel' => $roleVoirConfidentiel
+                        ]
+                    );
                 }
             }
         }
@@ -157,11 +192,17 @@ class EtudeController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $stateDescription = !empty($request->request->get('state')) ? $request->request->get('state') : '';
-        $stateID = !empty($request->request->get('id')) ? intval($request->request->get('id')) : 0;
-        $etudeID = !empty($request->request->get('etude')) ? intval($request->request->get('etude')) : 0;
+        $stateDescription = !empty($request->request->get('state'))
+            ? $request->request->get('state')
+            : '';
+        $stateID = !empty($request->request->get('id'))
+            ? intval($request->request->get('id'))
+            : 0;
+        $etudeID = !empty($request->request->get('etude'))
+            ? intval($request->request->get('etude'))
+            : 0;
 
-        if (!$etude = $em->getRepository(Etude::class)->find($etudeID)) {
+        if (!($etude = $em->getRepository(Etude::class)->find($etudeID))) {
             throw $this->createNotFoundException('L\'étude n\'existe pas !');
         } else {
             $etude->setStateDescription($stateDescription);
@@ -189,7 +230,9 @@ class EtudeController extends AbstractController
         $etude->setMandat($etudeManager->getMaxMandat());
         $etude->setNum($etudeManager->getNouveauNumero());
         $etude->setFraisDossier($etudeManager->getDefaultFraisDossier());
-        $etude->setPourcentageAcompte($etudeManager->getDefaultPourcentageAcompte());
+        $etude->setPourcentageAcompte(
+            $etudeManager->getDefaultPourcentageAcompte()
+        );
         $etude->setCeActive(true);
 
         $user = $this->getUser();
@@ -204,10 +247,15 @@ class EtudeController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                if ((!$etude->isKnownProspect() && !$etude->getNewProspect()) || ($etude->isKnownProspect() && !$etude->getProspect())) {
+                if (
+                    (!$etude->isKnownProspect() && !$etude->getNewProspect()) ||
+                    ($etude->isKnownProspect() && !$etude->getProspect())
+                ) {
                     $this->addFlash('danger', 'Vous devez définir un prospect');
 
-                    return $this->render('Project/Etude/ajouter.html.twig', ['form' => $form->createView()]);
+                    return $this->render('Project/Etude/ajouter.html.twig', [
+                        'form' => $form->createView()
+                    ]);
                 } elseif (!$etude->isKnownProspect()) {
                     $etude->setProspect($etude->getNewProspect());
                 }
@@ -217,18 +265,21 @@ class EtudeController extends AbstractController
                 $this->addFlash('success', 'Etude ajoutée');
 
                 if ($request->get('ap')) {
-                    return $this->redirectToRoute('project_ap_rediger', ['id' => $etude->getId()]);
+                    return $this->redirectToRoute('project_ap_rediger', [
+                        'id' => $etude->getId()
+                    ]);
                 } else {
-                    return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                    return $this->redirectToRoute('project_etude_voir', [
+                        'nom' => $etude->getNom()
+                    ]);
                 }
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }
 
         return $this->render('Project/Etude/ajouter.html.twig', [
-                'form' => $form->createView(),
-            ]
-        );
+            'form' => $form->createView()
+        ]);
     }
 
     /**
@@ -241,8 +292,11 @@ class EtudeController extends AbstractController
      *
      * @return Response
      */
-    public function voir(Etude $etude, EtudePermissionChecker $permChecker, ChartManager $chartManager)
-    {
+    public function voir(
+        Etude $etude,
+        EtudePermissionChecker $permChecker,
+        ChartManager $chartManager
+    ) {
         $em = $this->getDoctrine()->getManager();
 
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
@@ -250,7 +304,9 @@ class EtudeController extends AbstractController
         }
 
         //get contacts clients
-        $clientContacts = $em->getRepository(ClientContact::class)->getByEtude($etude, ['date' => 'desc']);
+        $clientContacts = $em
+            ->getRepository(ClientContact::class)
+            ->getByEtude($etude, ['date' => 'desc']);
 
         $ob = $chartManager->getGantt($etude, 'suivi');
 
@@ -260,7 +316,7 @@ class EtudeController extends AbstractController
             'etude' => $etude,
             'formSuivi' => $formSuivi->createView(),
             'chart' => $ob,
-            'clientContacts' => $clientContacts,
+            'clientContacts' => $clientContacts
             /* 'delete_form' => $deleteForm->createView(),  */
         ]);
     }
@@ -276,9 +332,12 @@ class EtudeController extends AbstractController
      *
      * @return RedirectResponse|Response
      */
-    public function modifier(Request $request, Etude $etude, EtudePermissionChecker $permChecker,
-                             ValidatorInterface $validator)
-    {
+    public function modifier(
+        Request $request,
+        Etude $etude,
+        EtudePermissionChecker $permChecker,
+        ValidatorInterface $validator
+    ) {
         $em = $this->getDoctrine()->getManager();
 
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
@@ -292,13 +351,16 @@ class EtudeController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                if ((!$etude->isKnownProspect() && !$etude->getNewProspect()) || !$etude->getProspect()) {
+                if (
+                    (!$etude->isKnownProspect() && !$etude->getNewProspect()) ||
+                    !$etude->getProspect()
+                ) {
                     $this->addFlash('danger', 'Vous devez définir un prospect');
 
                     return $this->render('Project/Etude/modifier.html.twig', [
                         'form' => $form->createView(),
                         'etude' => $etude,
-                        'delete_form' => $deleteForm->createView(),
+                        'delete_form' => $deleteForm->createView()
                     ]);
                 } elseif (!$etude->isKnownProspect()) {
                     $etude->setProspect($etude->getNewProspect());
@@ -308,11 +370,16 @@ class EtudeController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Etude modifiée');
 
-                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom()]);
+                return $this->redirectToRoute('project_etude_voir', [
+                    'nom' => $etude->getNom()
+                ]);
             } else {
                 $errors = $validator->validate($etude);
                 foreach ($errors as $error) {
-                    $this->addFlash('danger', $error->getPropertyPath() . ' : ' . $error->getMessage());
+                    $this->addFlash(
+                        'danger',
+                        $error->getPropertyPath() . ' : ' . $error->getMessage()
+                    );
                 }
             }
         }
@@ -320,7 +387,7 @@ class EtudeController extends AbstractController
         return $this->render('Project/Etude/modifier.html.twig', [
             'form' => $form->createView(),
             'etude' => $etude,
-            'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm->createView()
         ]);
     }
 
@@ -334,8 +401,11 @@ class EtudeController extends AbstractController
      *
      * @return RedirectResponse
      */
-    public function delete(Etude $etude, Request $request, EtudePermissionChecker $permChecker)
-    {
+    public function delete(
+        Etude $etude,
+        Request $request,
+        EtudePermissionChecker $permChecker
+    ) {
         $form = $this->createDeleteForm($etude);
 
         $form->handleRequest($request);
@@ -344,12 +414,17 @@ class EtudeController extends AbstractController
             $em = $this->getDoctrine()->getManager();
 
             if ($permChecker->confidentielRefus($etude, $this->getUser())) {
-                throw new AccessDeniedException('Cette étude est confidentielle');
+                throw new AccessDeniedException(
+                    'Cette étude est confidentielle'
+                );
             }
 
             $em->remove($etude);
             $em->flush();
-            $request->getSession()->getFlashBag()->add('success', 'Etude supprimée');
+            $request
+                ->getSession()
+                ->getFlashBag()
+                ->add('success', 'Etude supprimée');
         }
 
         return $this->redirectToRoute('project_etude_homepage');
@@ -380,8 +455,12 @@ class EtudeController extends AbstractController
         $etudesParMandat = [];
 
         for ($i = 1; $i < $MANDAT_MAX; ++$i) {
-            array_push($etudesParMandat,
-                $em->getRepository(Etude::class)->findBy(['mandat' => $i], ['num' => 'DESC']));
+            array_push(
+                $etudesParMandat,
+                $em
+                    ->getRepository(Etude::class)
+                    ->findBy(['mandat' => $i], ['num' => 'DESC'])
+            );
         }
 
         //WARN
@@ -413,15 +492,16 @@ class EtudeController extends AbstractController
         foreach (array_reverse($etudesParMandat) as $etudesInMandat) {
             /** @var Etude $etude */
             foreach ($etudesInMandat as $etude) {
-                $form = $form->add((string) (2 * $id), HiddenType::class,
-                    ['label' => 'refEtude',
-                     'data' => $etude->getReference($namingConvention),
-                    ]
-                )
-                    ->add((string) (2 * $id + 1), TextareaType::class,
-                        ['label' => $etude->getReference($namingConvention),
-                         'required' => false, 'data' => $etude->getStateDescription(),
-                        ]);
+                $form = $form
+                    ->add((string) (2 * $id), HiddenType::class, [
+                        'label' => 'refEtude',
+                        'data' => $etude->getReference($namingConvention)
+                    ])
+                    ->add((string) (2 * $id + 1), TextareaType::class, [
+                        'label' => $etude->getReference($namingConvention),
+                        'required' => false,
+                        'data' => $etude->getStateDescription()
+                    ]);
                 ++$id;
                 if (self::STATE_ID_EN_COURS == $etude->getStateID()) {
                     array_push($etudesEnCours, $etude);
@@ -438,7 +518,10 @@ class EtudeController extends AbstractController
             $id = 0;
             foreach (array_reverse($etudesParMandat) as $etudesInMandat) {
                 foreach ($etudesInMandat as $etude) {
-                    if ($data[2 * $id] == $etude->getReference($namingConvention)) {
+                    if (
+                        $data[2 * $id] ==
+                        $etude->getReference($namingConvention)
+                    ) {
                         if ($data[2 * $id] != $etude->getStateDescription()) {
                             $etude->setStateDescription($data[2 * $id + 1]);
                             $em->persist($etude);
@@ -457,7 +540,7 @@ class EtudeController extends AbstractController
         return $this->render('Project/Etude/suiviEtudes.html.twig', [
             'etudesParMandat' => $etudesParMandat,
             'form' => $form->createView(),
-            'chart' => $ob,
+            'chart' => $ob
         ]);
     }
 
@@ -473,10 +556,18 @@ class EtudeController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $etudesEnCours = $em->getRepository(Etude::class)
-            ->findBy(['stateID' => self::STATE_ID_EN_COURS], ['mandat' => 'DESC', 'num' => 'DESC']);
-        $etudesTerminees = $em->getRepository(Etude::class)
-            ->findBy(['stateID' => self::STATE_ID_TERMINEE], ['mandat' => 'DESC', 'num' => 'DESC']);
+        $etudesEnCours = $em
+            ->getRepository(Etude::class)
+            ->findBy(
+                ['stateID' => self::STATE_ID_EN_COURS],
+                ['mandat' => 'DESC', 'num' => 'DESC']
+            );
+        $etudesTerminees = $em
+            ->getRepository(Etude::class)
+            ->findBy(
+                ['stateID' => self::STATE_ID_TERMINEE],
+                ['mandat' => 'DESC', 'num' => 'DESC']
+            );
         $etudes = array_merge($etudesEnCours, $etudesTerminees);
 
         $ob = $chartManager->getGanttSuivi($etudes);
@@ -484,7 +575,7 @@ class EtudeController extends AbstractController
         return $this->render('Project/Etude/suiviQualite.html.twig', [
             'etudesEnCours' => $etudesEnCours,
             'etudesTerminees' => $etudesTerminees,
-            'chart' => $ob,
+            'chart' => $ob
         ]);
     }
 
@@ -498,8 +589,11 @@ class EtudeController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function suiviUpdate(Request $request, Etude $etude, EtudePermissionChecker $permChecker)
-    {
+    public function suiviUpdate(
+        Request $request,
+        Etude $etude,
+        EtudePermissionChecker $permChecker
+    ) {
         $em = $this->getDoctrine()->getManager();
 
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
@@ -515,8 +609,9 @@ class EtudeController extends AbstractController
         $formSuivi->handleRequest($request);
 
         if (!$formSuivi->isValid()) {
-            return new JsonResponse(['responseCode' => Response::HTTP_PRECONDITION_FAILED,
-                                     'msg' => 'Erreur:' . $formSuivi->getErrors(true, false),
+            return new JsonResponse([
+                'responseCode' => Response::HTTP_PRECONDITION_FAILED,
+                'msg' => 'Erreur:' . $formSuivi->getErrors(true, false)
             ]);
         }
         if (!$ap) {
@@ -531,7 +626,9 @@ class EtudeController extends AbstractController
         $em->persist($etude);
         $em->flush();
 
-        return new JsonResponse(['responseCode' => Response::HTTP_OK, 'msg' => 'ok',
+        return new JsonResponse([
+            'responseCode' => Response::HTTP_OK,
+            'msg' => 'ok'
         ]); //make sure it has the correct content type
     }
 
@@ -551,22 +648,30 @@ class EtudeController extends AbstractController
         if ($id > 0) {
             $etude = $em->getRepository(Etude::class)->find($id);
         } else {
-            $etude = $em->getRepository(Etude::class)->findOneBy(['stateID' => self::STATE_ID_EN_COURS]);
+            $etude = $em
+                ->getRepository(Etude::class)
+                ->findOneBy(['stateID' => self::STATE_ID_EN_COURS]);
         }
 
         if (null === $etude) {
-            $etude = $em->getRepository(Etude::class)
+            $etude = $em
+                ->getRepository(Etude::class)
                 ->findOneBy(['stateID' => self::STATE_ID_EN_NEGOCIATION]);
         }
 
         if (null === $etude) {
-            throw $this->createNotFoundException('Vous devez avoir au moins une étude de créée pour accéder à cette page.');
+            throw $this->createNotFoundException(
+                'Vous devez avoir au moins une étude de créée pour accéder à cette page.'
+            );
         }
 
         //Etudes En Négociation : stateID = 1
-        $etudesDisplayList = $em->getRepository(Etude::class)->getTwoStates([self::STATE_ID_EN_NEGOCIATION,
-                                                                             self::STATE_ID_EN_COURS,
-        ], ['mandat' => 'ASC', 'num' => 'ASC']);
+        $etudesDisplayList = $em
+            ->getRepository(Etude::class)
+            ->getTwoStates(
+                [self::STATE_ID_EN_NEGOCIATION, self::STATE_ID_EN_COURS],
+                ['mandat' => 'ASC', 'num' => 'ASC']
+            );
 
         if (!in_array($etude, $etudesDisplayList)) {
             throw $this->createNotFoundException('Etude incorrecte');
@@ -582,9 +687,15 @@ class EtudeController extends AbstractController
         return $this->render('Project/Etude/vuCA.html.twig', [
             'etude' => $etude,
             'chart' => $ob,
-            'nextID' => (null !== $etudesDisplayList[$nextId] ? $etudesDisplayList[$nextId]->getId() : 0),
-            'prevID' => (null !== $etudesDisplayList[$previousId] ? $etudesDisplayList[$previousId]->getId() : 0),
-            'etudesDisplayList' => $etudesDisplayList,
+            'nextID' =>
+                null !== $etudesDisplayList[$nextId]
+                    ? $etudesDisplayList[$nextId]->getId()
+                    : 0,
+            'prevID' =>
+                null !== $etudesDisplayList[$previousId]
+                    ? $etudesDisplayList[$previousId]->getId()
+                    : 0,
+            'etudesDisplayList' => $etudesDisplayList
         ]);
     }
 }

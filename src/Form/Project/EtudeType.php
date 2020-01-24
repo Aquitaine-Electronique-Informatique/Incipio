@@ -99,6 +99,16 @@ class EtudeType extends AbstractType
                 },
                 'required' => false,
             ])
+            ->add('suiveurProspection', Select2EntityType::class, [
+                'label' => 'suivi.etude_form.suiveur_prospection',
+                'translation_domain' => 'project',
+                'class' => Personne::class,
+                'choice_label' => 'prenomNom',
+                'query_builder' => function (PersonneRepository $pr) {
+                    return $pr->getMembreOnly();
+                },
+                'required' => false
+            ])
             ->add('domaineCompetence', Select2EntityType::class, [
                 'class' => DomaineCompetence::class,
                 'choice_label' => 'nom',

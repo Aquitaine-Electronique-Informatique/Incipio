@@ -142,6 +142,7 @@ suivi:
     source_prospection: Source de prospection
     suiveur_projet: Suiveur de projet
     suiveur_qualite: Suiveur qualité
+    suiveur_prospection: Suiveur commercial
   etude_l: L'étude
   etude_modifier: Modifier une étude
   etude_nom: Nom de l'étude
@@ -266,6 +267,7 @@ suivi:
   suiveur: Suiveur
   suiveur_projet: Suiveur de projet
   suiveur_qualite: Suiveur Qualité
+  suiveur_prospection: Suiveur commercial
   suivi: Suivi
   suivi_affichage: Affichage du suivi
   suivi_ajouter: Ajouter un suivi

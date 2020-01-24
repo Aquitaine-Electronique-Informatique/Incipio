@@ -10,9 +10,7 @@
 
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            {#% if etudesSuiveur | length %}
-            <li class="active"><a href="#tab1" data-toggle="tab">Etudes à suivre ({{app.user.personne.prenomnom|default('non connecté')}})</a></li>
-            {% endif %#}
+            <li class="actived"><a href="#tab1" data-toggle="tab">Etudes en prospection ({{ etudesEnProspection | length }})</a></li>
             <li class="active"><a href="#tab2" data-toggle="tab">{{ 'suivi.etudes_negociations'|trans({}, 'project') }}
                     ({{ etudesEnNegociation | length }})</a></li>
             <li><a href="#tab3" data-toggle="tab">{{ 'suivi.etudes_en_cours'|trans({}, 'project') }}
@@ -30,6 +28,9 @@
         </ul>
     </div>
     <div class="tab-content">
+        <div class="tab-pane active" id="tab1" style="min-height: 400px;">
+            {% include "Project/Etude/Tab/EtudesEnProspection.html.twig" with  {'etudesEnProspection':  etudesEnProspection} %}
+        </div>
         <div class="tab-pane active" id="tab2" style="min-height: 400px;">
             {% include "Project/Etude/Tab/EtudesEnNegociation.html.twig" with  {'etudesEnNegociation':  etudesEnNegociation} %}
         </div>

@@ -34,6 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Etude
 {
+    public const ETUDE_STATE_PROSPECTION = 0;
+
     public const ETUDE_STATE_NEGOCIATION = 1;
 
     public const ETUDE_STATE_COURS = 2;
@@ -44,11 +46,13 @@ class Etude
 
     public const ETUDE_STATE_AVORTEE = 5;
 
-    public const ETUDE_STATE_ARRAY = [self::ETUDE_STATE_NEGOCIATION => 'En négociation',
+    public const ETUDE_STATE_ARRAY = [
+        self::ETUDE_STATE_PROSPECTION => 'En prospection',
+        self::ETUDE_STATE_NEGOCIATION => 'En négociation',
         self::ETUDE_STATE_COURS => 'En cours',
         self::ETUDE_STATE_PAUSE => 'En pause',
         self::ETUDE_STATE_CLOTUREE => 'Cloturée',
-        self::ETUDE_STATE_AVORTEE => 'Avortée',
+        self::ETUDE_STATE_AVORTEE => 'Avortée'
     ];
 
     /**
@@ -109,7 +113,7 @@ class Etude
 
     /**
      * @var int
-     * @Assert\Choice({1,2,3,4,5})
+     * @Assert\Choice({0,1,2,3,4,5})
      * @ORM\Column(name="stateID", type="integer", nullable=false)
      */
     private $stateID;
@@ -185,6 +189,12 @@ class Etude
      * @ORM\JoinColumn(nullable=true)
      */
     protected $suiveurQualite;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Personne")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $suiveurProspection;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Comment\Thread", cascade={"persist"})
@@ -337,7 +347,8 @@ class Etude
     public function prePersist()
     {
         $this->dateCreation = $this->dateCreation ?? new \DateTime('now');
-        $this->dateModification = $this->dateModification ?? new \DateTime('now');
+        $this->dateModification =
+            $this->dateModification ?? new \DateTime('now');
     }
 
     /**
@@ -379,8 +390,11 @@ class Etude
      */
     public function getReference($namingConvention = 'id')
     {
-        return 'nom' == $namingConvention ? $this->getNom() :
-            ('numero' === $namingConvention ? $this->getNumero() : $this->getId());
+        return 'nom' == $namingConvention
+            ? $this->getNom()
+            : ('numero' === $namingConvention
+                ? $this->getNumero()
+                : $this->getId());
     }
 
     public function getFa()
@@ -442,10 +456,12 @@ class Etude
      */
     public function getDateLancement()
     {
-        if ($this->ce) {// Réel
+        if ($this->ce) {
+            // Réel
             return $this->ce->getDateSignature();
         }
-        if ($this->cc) { // Réel
+        if ($this->cc) {
+            // Réel
             return $this->cc->getDateSignature();
         }
 
@@ -481,7 +497,10 @@ class Etude
         foreach ($phases as $p) {
             if (null !== $p->getDateDebut() && null !== $p->getDelai()) {
                 $dateDebut = clone $p->getDateDebut();
-                array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
+                array_push(
+                    $dateFin,
+                    $dateDebut->modify('+' . $p->getDelai() . ' day')
+                );
                 unset($dateDebut);
             }
         }
@@ -489,7 +508,9 @@ class Etude
         if (count($dateFin) > 0) {
             $dateFin = max($dateFin);
             if ($avecAvenant && $this->avs && $this->avs->last()) {
-                $dateFin->modify('+' . $this->avs->last()->getDifferentielDelai() . ' day');
+                $dateFin->modify(
+                    '+' . $this->avs->last()->getDifferentielDelai() . ' day'
+                );
             }
 
             return $dateFin;
@@ -501,10 +522,15 @@ class Etude
     public function getDelai($avecAvenant = false)
     {
         if ($this->getDateFin($avecAvenant)) {
-            if ($this->cc && $this->cc->getDateSignature()) { // Réel
-                return $this->getDateFin($avecAvenant)->diff($this->cc->getDateSignature());
+            if ($this->cc && $this->cc->getDateSignature()) {
+                // Réel
+                return $this->getDateFin($avecAvenant)->diff(
+                    $this->cc->getDateSignature()
+                );
             } elseif ($this->getDateLancement()) {
-                return $this->getDateFin($avecAvenant)->diff($this->getDateLancement());
+                return $this->getDateFin($avecAvenant)->diff(
+                    $this->getDateLancement()
+                );
             }
         }
 
@@ -529,8 +555,8 @@ class Etude
         $this->competences = new ArrayCollection();
 
         $this->fraisDossier = 90;
-        $this->pourcentageAcompte = 0.40;
-        $this->stateID = 1;
+        $this->pourcentageAcompte = 0.4;
+        $this->stateID = 0;
     }
 
     /**
@@ -553,7 +579,9 @@ class Etude
             case 'FA':
                 return $this->getFa();
             case 'FI':
-                throw new \Exception('Missing implementation of getFis() on Etude entity');
+                throw new \Exception(
+                    'Missing implementation of getFis() on Etude entity'
+                );
             case 'FS':
                 return $this->getFs();
             case 'PVR':
@@ -568,7 +596,7 @@ class Etude
                 } else {
                     return $this->getMissions()->get($key);
                 }
-                // no break
+            // no break
             default:
                 return null;
         }
@@ -782,9 +810,7 @@ class Etude
 
     public static function getAuditTypeChoice()
     {
-        return ['1' => 'Déontologique',
-            '2' => 'Exhaustif',
-        ];
+        return ['1' => 'Déontologique', '2' => 'Exhaustif'];
     }
 
     public static function getAuditTypeChoiceAssert()
@@ -981,6 +1007,22 @@ class Etude
     public function setSuiveurQualite($suiveurQualite)
     {
         $this->suiveurQualite = $suiveurQualite;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSuiveurProspection()
+    {
+        return $this->suiveurProspection;
+    }
+
+    /**
+     * @param mixed $suiveurProspection
+     */
+    public function setSuiveurProspection($suiveurProspection)
+    {
+        $this->suiveurProspection = $suiveurProspection;
     }
 
     /**
@@ -1633,7 +1675,7 @@ class Etude
             8 => 'Ancien client',
             9 => 'Dev\'Co',
             10 => 'Partenariat JE',
-            11 => 'Autre',
+            11 => 'Autre'
         ];
     }
 
@@ -1641,7 +1683,9 @@ class Etude
     {
         $tab = $this->getSourceDeProspectionChoice();
 
-        return $this->sourceDeProspection ? $tab[$this->sourceDeProspection] : '';
+        return $this->sourceDeProspection
+            ? $tab[$this->sourceDeProspection]
+            : '';
     }
 
     /**
@@ -1673,7 +1717,7 @@ class Etude
         if ($a->getDateSignature() == $b->getDateSignature()) {
             return 0;
         } else {
-            return ($a->getDateSignature() < $b->getDateSignature()) ? -1 : 1;
+            return $a->getDateSignature() < $b->getDateSignature() ? -1 : 1;
         }
     }
 
@@ -1738,8 +1782,9 @@ class Etude
      *
      * @return Etude
      */
-    public function setDomaineCompetence(DomaineCompetence $domaineCompetence = null)
-    {
+    public function setDomaineCompetence(
+        DomaineCompetence $domaineCompetence = null
+    ) {
         $this->domaineCompetence = $domaineCompetence;
 
         return $this;
