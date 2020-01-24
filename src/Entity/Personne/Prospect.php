@@ -324,6 +324,16 @@ class Prospect extends Adressable
     }
 
     /**
+     * Get "date_rencontre".
+     *
+     *  @return DateTime
+     */
+    public function getdate_rencontre()
+    {
+        return $this->date_rencontre;
+    }
+
+    /**
      * Set "date_rencontre".
      *
      * @param DateTime $date
