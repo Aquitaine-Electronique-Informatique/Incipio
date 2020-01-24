@@ -49,7 +49,7 @@ class RelatedDocumentController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_QUALITE')")
+     * @Security("has_role('ROLE_QUALITE') || has_role('ROLE_SUIVEUR')")
      * @Route(name="quality_mark_validated", path="/Documents/Validate/{id}", methods={"GET","HEAD","POST"})
      *
      */

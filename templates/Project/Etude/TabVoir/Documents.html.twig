@@ -59,6 +59,9 @@
 	    <a title="Notifier Qualité" href="{{ path('relecture_notify_qualite', {'id' : doc.id }) }}">
 	    <i class="fa fas fa-edit"></i>
 	    </a>
+        <a title="Valider" href="{{ path('quality_mark_validated', {'id' : relatedDocument.id }) }}">
+        <i class="fa far fa-check"></i>
+        </a>
 	</td>
         {% endif %}
     </tr>
