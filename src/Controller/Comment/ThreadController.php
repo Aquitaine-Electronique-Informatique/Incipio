@@ -350,7 +350,9 @@ class ThreadController extends AbstractController
                 $id));
         }
 
-        $form = $this->createForm(CommentType::class, $comment, ['method' => 'PUT']);
+        $form = $this->createForm(CommentType::class, $comment, [
+            'method' => 'POST'
+        ]);
         $form->setData($comment);
 
         return $this->render('Comment/Thread/comment_edit.html.twig',
@@ -359,7 +361,7 @@ class ThreadController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="fos_comment_put_thread_comments", path="/api/threads/{id}/comments/{commentId}", methods={"PUT"})
+     * @Route(name="fos_comment_put_thread_comments", path="/api/threads/{id}/comments/{commentId}", methods={"POST"})
      *
      * Edits a given comment.
      *
@@ -382,11 +384,13 @@ class ThreadController extends AbstractController
                 $id));
         }
 
-        $form = $this->createForm(CommentType::class, $comment, ['method' => 'PUT']);
+        $form = $this->createForm(CommentType::class, $comment, [
+            'method' => 'POST'
+        ]);
         $form->setData($comment);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             if (false !== $commentManager->saveComment($comment)) {
                 return $this->onEditCommentSuccess($form, $id);
             }
