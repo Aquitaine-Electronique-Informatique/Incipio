@@ -14,6 +14,7 @@
         <tr>
             <th>Date d'upload</th>
             <th>Titre</th>
+            <th>Étude</th>
             <th>Taille</th>
             <th>Status</th>
             <th>Action</th>
@@ -22,6 +23,7 @@
 	  <tr>
 	   <td>{{ related.document.uptime ? related.document.uptime | date('d/m/Y - H:i:s') }}</td>
 	    <td> <a href="{{ path('publish_document_voir', {'id': related.document.id}) }}">{{ related.document.name }}</a> </td>
+	    <td>{{ related.etude }}</td>
 	    <td>{{ (related.document.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
 	    <td>
 	      {% if related.status == 0 %}
