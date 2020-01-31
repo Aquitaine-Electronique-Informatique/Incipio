@@ -8,7 +8,8 @@
 		</div>
 		<div class="collapse navbar-collapse navbar-suivi">
             <ul class="nav  navbar-nav">
-                <li><a href="{{ path('publish_document_uploadEtude', {'nom': etude.nom}) }}"><span class="fa fa-pencil"></span> {{ 'suivi.document_ajouter'|trans({}, 'project') }}</a></li>
+                <li><a href="{{ path('publish_document_uploadEtude', {'nom': etude.nom, 'should_validate': '1'}) }}"><span class="fa fa-pencil"></span> {{ 'suivi.document_ajouter'|trans({}, 'project') }} avec relecture</a></li>
+                <li><a href="{{ path('publish_document_uploadEtude', {'nom': etude.nom, 'should_validate': '0'}) }}"><span class="fa fa-pencil"></span> {{ 'suivi.document_ajouter'|trans({}, 'project') }} sans relecture</a></li>
             </ul>
     </div>
 </nav>
@@ -47,22 +48,19 @@
 	    <a title="Supprimer" href="{{ path('publish_document_delete', {'id' : doc.id })  }}">
 	    <i class="fa fa-times"></i>
 	    </a>
-	    <a title="Réuploader" href="{{ path('publish_document_reuploadEtude' , {'id' : doc.id }) }}">
-	    <i class="fa fa-cloud-upload"></i>
+	    <a title="Réuploader sans relecture" href="{{ path('publish_document_reuploadEtude' , {'id' : doc.id, 'should_validate': '0' }) }}">
+            <i class="fa fa-cloud-upload"></i>
 	    </a>
+        <a title="Réuploader avec relecture" href="{{ path('publish_document_reuploadEtude' , {'id' : doc.id, 'should_validate': '1' }) }}">
+            <i class="fa fa-cloud-upload"></i>
+        </a>
 	    <a title="Télécharger" href="{{ path('publish_document_download', {'id' : doc.id }) }}">
-	    <i class="fa fa-cloud-download"></i>
-	    </a>
-	    <a title="Notifier Étude" href="{{ path('relecture_notify_etude', {'id' : doc.id }) }}">
-	    <i class="fa far fa-envelope"></i>
+	        <i class="fa fa-cloud-download"></i>
 	    </a>
 	    <a title="Notifier Qualité" href="{{ path('relecture_notify_qualite', {'id' : doc.id }) }}">
-	    <i class="fa fas fa-edit"></i>
+	        <i class="fa fas fa-edit"></i>
 	    </a>
-        <a title="Valider" href="{{ path('quality_mark_validated', {'id' : relatedDocument.id }) }}">
-        <i class="fa far fa-check"></i>
-        </a>
-	</td>
+	      </td>
         {% endif %}
     </tr>
     {% endfor %}

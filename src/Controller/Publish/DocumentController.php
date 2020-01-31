@@ -128,7 +128,7 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="publish_document_uploadEtude", path="/Documents/Upload/Etude/{nom}", methods={"GET","HEAD","POST"})
+     * @Route(name="publish_document_uploadEtude", path="/Documents/Upload/Etude/{nom}/{should_validate}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -143,7 +143,8 @@ class DocumentController extends AbstractController
         Etude $etude,
         EtudePermissionChecker $permChecker,
         DocumentManager $documentManager,
-        KernelInterface $kernel
+        KernelInterface $kernel,
+        int $should_validate
     ) {
         if ($permChecker->confidentielRefus($etude, $this->getUser())) {
             throw new AccessDeniedException('Cette étude est confidentielle !');
@@ -155,7 +156,8 @@ class DocumentController extends AbstractController
                 false,
                 ['etude' => $etude],
                 $documentManager,
-                $kernel
+                $kernel,
+                $should_validate
             ))
         ) {
             $this->addFlash('success', 'Document mis en ligne');
@@ -170,7 +172,7 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="publish_document_reuploadEtude", path="/Documents/Reupload/Etude/{id}", methods={"GET","HEAD","POST"})
+     * @Route(name="publish_document_reuploadEtude", path="/Documents/Reupload/Etude/{id}/{should_validate}", methods={"GET","HEAD","POST"})
      *
      * @param Request                $request
      * @param Etude                  $etude
@@ -185,7 +187,8 @@ class DocumentController extends AbstractController
         Document $doc,
         EtudePermissionChecker $permChecker,
         DocumentManager $documentManager,
-        KernelInterface $kernel
+        KernelInterface $kernel,
+        int $should_validate
     ) {
         $etude = $doc->getRelation()->getEtude();
 
@@ -200,7 +203,8 @@ class DocumentController extends AbstractController
                 ['etude' => $etude],
                 $documentManager,
                 $kernel,
-                $doc
+                $doc,
+                $should_validate
             ))
         ) {
             $this->addFlash('success', 'Document mis en ligne');
@@ -330,13 +334,18 @@ class DocumentController extends AbstractController
         $deleteIfExist = false,
         $options = [],
         DocumentManager $documentManager,
-        KernelInterface $kernel
+        KernelInterface $kernel,
+        int $should_validate
     ) {
         $document = new Document();
         $document->setProjectDir($kernel->getProjectDir());
         if (count($options)) {
             $relatedDocument = new RelatedDocument();
-            $relatedDocument->setStatus(0); // Should be reviewed
+            if ($should_validate) {
+                $relatedDocument->setStatus(0); // Should be reviewed
+            } else {
+                $relatedDocument->setStatus(2); // Validated
+            }
             $relatedDocument->setDocument($document);
             $document->setRelation($relatedDocument);
             if (array_key_exists('etude', $options)) {
@@ -352,7 +361,7 @@ class DocumentController extends AbstractController
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
 
-            if ($form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $documentManager->uploadDocument(
                     $document,
                     null,
@@ -374,18 +383,23 @@ class DocumentController extends AbstractController
         $options = [],
         DocumentManager $documentManager,
         KernelInterface $kernel,
-        Document $document
+        Document $document,
+        int $should_validate
     ) {
         $document->setProjectDir($kernel->getProjectDir());
         $relatedDocument = $document->getRelation();
-        $relatedDocument->setStatus(0); // Should be reviewed
+        if ($should_validate) {
+            $relatedDocument->setStatus(0); // Should be reviewed
+        } else {
+            $relatedDocument->setStatus(2); // Validated
+        }
 
         $form = $this->createForm(DocumentType::class, $document, $options);
 
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
 
-            if ($form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $documentManager->uploadDocument(
                     $document,
                     $relatedDocument,

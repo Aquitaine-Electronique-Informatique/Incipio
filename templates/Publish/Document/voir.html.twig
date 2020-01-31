@@ -30,8 +30,11 @@
             <form action="{{ path('publish_document_delete', {'id': doc.id}) }} method="post">
                 <input class="btn btn-success" type="submit" value="Supprimer"/>
             </form>
-            <form action="{{ path('publish_document_reuploadEtude', {'id': doc.id}) }} method="post">
-                <input class="btn btn-success" type="submit" value="Réuploader"/>
+            <form action="{{ path('publish_document_reuploadEtude', {'id': doc.id, 'should_validate': '0'}) }}" method="post">
+                <input class="btn btn-success" type="submit" value="Réuploader avec relecture"/>
+            </form>
+            <form action="{{ path('publish_document_reuploadEtude', {'id': doc.id, 'should_validate': '1'}) }}" method="post">
+                <input class="btn btn-success" type="submit" value="Réuploader sans relecture"/>
             </form>
         {% endif %}
         {% if is_granted('ROLE_QUALITE') %}
