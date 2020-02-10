@@ -10,7 +10,8 @@
 </head>
 <body>
     <p>Bonjour,</p>
-    <p>Le document <a href="{{ url('publish_document_voir', {'id': doc.id}) }}"><strong>{{ doc.name }}</strong></a> a été relu.</p>
+    <p>Le document <a href="erp.junior-aei.com/Documents/show/{{doc.id}}"><strong>{{
+    doc.name}}</strong></a>, lié à l'étude {{doc.relation.etude}} a été relu.</p>
 <p><i>Robotiquement vôtre,</i><br>
     <strong>Robot AEI</strong></p>
 </body>
