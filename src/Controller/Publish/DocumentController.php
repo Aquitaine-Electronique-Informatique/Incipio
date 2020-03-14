@@ -335,7 +335,7 @@ class DocumentController extends AbstractController
         $options = [],
         DocumentManager $documentManager,
         KernelInterface $kernel,
-        int $should_validate
+        int $should_validate = null
     ) {
         $document = new Document();
         $document->setProjectDir($kernel->getProjectDir());
