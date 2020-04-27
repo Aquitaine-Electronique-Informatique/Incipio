@@ -35,16 +35,16 @@
 	      {% endif %}
 	    </td>
 	    <td>
-	      <a title="Télécharger" href="{{ path('publish_document_download', {'id' : related.document.id }) }}">
+	      <a title="Télécharger" onclick="return confirm('Telecharger le document ?')" href="{{ path('publish_document_download', {'id' : related.document.id }) }}">
 		<i class="fa fa-cloud-download"></i>
 	      </a>
-	      <a title="Notifier Étude" href="{{ path('relecture_notify_etude', {'id' : related.document.id }) }}">
+	      <a title="Notifier Étude" onclick="return confirm('Notifier étude ?')" href="{{ path('relecture_notify_etude', {'id' : related.document.id }) }}">
 		<i class="fa far fa-envelope"></i>
 	      </a>
-	      <a title="À modifier" href="{{ path('quality_mark_reviewed', {'id' : related.id }) }}">
+	      <a title="À modifier" onclick="return confirm('Le document est à modifier ?')" href="{{ path('quality_mark_reviewed', {'id' : related.id }) }}">
         <i class="fa far fa-times"></i>
 	      </a>
-	      <a title="Valider" href="{{ path('quality_mark_validated', {'id' : related.id }) }}">
+	      <a title="Valider" onclick="return confirm('Le document est valide ?')" href="{{ path('quality_mark_validated', {'id' : related.id }) }}">
         <i class="fa far fa-check"></i>
 	      </a>
 	    </td>
