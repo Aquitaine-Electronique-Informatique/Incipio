@@ -21,24 +21,24 @@
 
     <div class="btn-group" role="group" aria-label="Basic example">
         {% if is_granted('ROLE_SUIVEUR') %}
-            <form action="{{ path('relecture_notify_qualite', {'id': doc.id}) }}" method="post">
+            <form action="{{ path('relecture_notify_qualite', {'id': doc.id})}}" method="post" onsubmit="return confirm('Notifier chargé qualité ?');">
                 <input class="btn btn-success" type="submit" value="Notifier chargé Qualité"/>
             </form>
-            <form action="{{ path('publish_document_download', {'id': doc.id}) }}" method="get">
+            <form action="{{ path('publish_document_download', {'id': doc.id}) }}" method="get" onsubmit="return confirm('Telecharger le document ?');">
                 <input class="btn btn-success" type="submit" value="Télécharger"/>
             </form>
-            <form action="{{ path('publish_document_delete', {'id': doc.id}) }} method="post">
+            <form action="{{ path('publish_document_delete', {'id': doc.id}) }}" method="post" onsubmit="return confirm('Confirmer la suppression ?');">
                 <input class="btn btn-success" type="submit" value="Supprimer"/>
             </form>
-            <form action="{{ path('publish_document_reuploadEtude', {'id': doc.id, 'should_validate': '0'}) }}" method="post">
+            <form action="{{ path('publish_document_reuploadEtude', {'id': doc.id, 'should_validate': '0'}) }}" method="post" onsubmit="return confirm('Réuploader avec relecture ?');">
                 <input class="btn btn-success" type="submit" value="Réuploader avec relecture"/>
             </form>
-            <form action="{{ path('publish_document_reuploadEtude', {'id': doc.id, 'should_validate': '1'}) }}" method="post">
+            <form action="{{ path('publish_document_reuploadEtude', {'id': doc.id, 'should_validate': '1'}) }}" method="post" onsubmit="return confirm('Réuploader sans relecture ?');">
                 <input class="btn btn-success" type="submit" value="Réuploader sans relecture"/>
             </form>
         {% endif %}
         {% if is_granted('ROLE_QUALITE') %}
-            <form action="{{ path('relecture_notify_etude', {'id': doc.id}) }}" method="post">
+            <form action="{{ path('relecture_notify_etude', {'id': doc.id}) }}" method="post" onsubmit="return confirm('Notifier chargé étude?');">
                 <input class="btn btn-success" type="submit" value="Notifier chargé Étude"/>
             </form>
         {% endif %}
