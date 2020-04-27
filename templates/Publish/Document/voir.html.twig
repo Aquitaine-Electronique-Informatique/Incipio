@@ -42,6 +42,10 @@
                 <input class="btn btn-success" type="submit" value="Notifier chargé Étude"/>
             </form>
         {% endif %}
+            <form action="{{ path('publish_document_afficher', {'id': doc.id}) }}" method="get">
+                <input class="btn btn-success" type="submit" value="Afficher"/>
+            </form>
+
     </div>
     <div>
     {% if doc.relation.thread|default('0') %}

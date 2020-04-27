@@ -110,6 +110,37 @@ class DocumentController extends AbstractController
     }
 
     /**
+     * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="publish_document_afficher", path="/Documents/afficher/{id}", methods={"GET","HEAD"})
+     *
+     * @param Document        $documentType (ParamConverter) The document to be downloaded
+     * @param KernelInterface $kernel
+     *
+     * @return BinaryFileResponse
+     *
+     * @throws \Exception
+     */
+    public function afficher(Document $documentType, KernelInterface $kernel)
+    {
+        $documentStoragePath =
+            $kernel->getProjectDir() . '' . Document::DOCUMENT_STORAGE_ROOT;
+        if (
+            file_exists($documentStoragePath . '/' . $documentType->getPath())
+        ) {
+            return new BinaryFileResponse(
+                $documentStoragePath . '/' . $documentType->getPath()
+            );
+        } else {
+            throw new \Exception(
+                $documentStoragePath .
+                    '/' .
+                    $documentType->getPath() .
+                    ' n\'existe pas'
+            );
+        }
+    }
+
+    /**
      * @Security("has_role('ROLE_QUALITE')")
      * @Route(name="document_relecture_list", path="/Quality/Documents", methods={"GET","HEAD"})
      */
