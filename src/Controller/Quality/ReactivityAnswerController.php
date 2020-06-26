@@ -34,7 +34,7 @@ class ReactivityAnswerController extends Controller
             $this->addFlash('info', "Vous avez déjà répondu à la question de réactivité");
             return $this->redirectToRoute('dashboard_homepage', []);
         }
-        if (date_diff($current_question->getAskedAt(), new DateTime("now"))->d >= 1 && $member_answers->count() == 0) 
+        if (date_diff($current_question->getAskedAt(), new DateTime("now"))->d >= 1 && count($member_answers) == 0)
         {
             $this->addFlash('danger', "Trop tard ! Vous avez été trop lent à répondre !");
             return $this->redirectToRoute('dashboard_homepage', []);
