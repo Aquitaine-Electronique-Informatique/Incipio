@@ -82,7 +82,7 @@ class DashboardController extends AbstractController
         $prospectsRepository = $this->getDoctrine()->getRepository(Prospect::class);
 
         $statsStore->set('ca_negociation', $etudeRepository->getCaByState(EtudeController::STATE_ID_EN_NEGOCIATION));
-        $statsStore->set('ca_encours', $etudeRepository->getCaByState(EtudeController::STATE_ID_EN_COURS));
+        $statsStore->set('ca_encours', $etudeRepository->getCaByState(EtudeController::STATE_ID_EN_COURS, date('Y')));
         $statsStore->set('ca_cloture', $etudeRepository->getCaByState(EtudeController::STATE_ID_TERMINEE, date('Y')));
 
         $statsStore->set('etudes_en_cours', count($etudeRepository->getByState(EtudeController::STATE_ID_EN_COURS)));
