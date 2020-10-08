@@ -205,7 +205,7 @@ class EtudeRepository extends EntityRepository
      * Calculate the sum of CA for a given state (and mandat).
      *
      * @param int  $state  state of the etudes to sum
-     * @param null $mandat
+     * @param int $mandat
      *
      * @return int
      */
