@@ -27,6 +27,6 @@ docker-compose up -d
 # Give time to boot DB container then load database schema & fixtures
 echo "Waiting some seconds before setting up the database"
 sleep 60
-docker-compose exec web composer install:first
+docker-compose exec web composer install
 echo "Installation is now complete. You can now log in with credentials admin/admin. Don't forget to change that password."
 
