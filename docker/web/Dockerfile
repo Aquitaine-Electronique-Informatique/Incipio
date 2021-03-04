@@ -1,7 +1,7 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 # PHP extensions
-ENV APCU_VERSION 5.1.11
+ENV APCU_VERSION 5.1.17
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV OPENSSL_CONF /etc/ssl/
 RUN buildDeps=" \
@@ -14,9 +14,10 @@ RUN buildDeps=" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         $buildDeps \
-        libicu-dev \
+        libicu63 \
         zlib1g \
         libzip4 \
+        libonig-dev \
         git \
         fontconfig \
         unzip \
@@ -48,7 +49,6 @@ COPY docker/web/composer.sh /usr/bin/composer.sh
 # Install composer
 RUN /usr/bin/composer.sh \
     && mv composer.phar /usr/bin/composer \
-    && composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative \
     && composer clear-cache
 
 # Add dependencies (before app to make a better cache usage)
@@ -65,4 +65,3 @@ RUN mkdir -p var/cache var/sessions public/tmp \
 RUN composer dump-autoload --classmap-authoritative --no-dev \
     # Fixes permissions issues in non-dev mode
     && chown -R www-data . var/cache var/sessions public/tmp
-

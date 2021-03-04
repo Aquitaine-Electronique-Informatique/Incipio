@@ -12,7 +12,7 @@ use Doctrine\Migrations\AbstractMigration;
  */
 class Version20180110191604 extends AbstractMigration
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(),
@@ -24,7 +24,7 @@ class Version20180110191604 extends AbstractMigration
         $this->addSql('ALTER TABLE Etude ADD CONSTRAINT FK_DC1F8620A823BE4F FOREIGN KEY (cc_id) REFERENCES Cc (id) ON DELETE SET NULL');
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(),
