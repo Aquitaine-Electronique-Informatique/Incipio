@@ -53,15 +53,15 @@ RUN /usr/bin/composer.sh \
 
 # Add dependencies (before app to make a better cache usage)
 WORKDIR /app
-ARG APP_ENV=prod
+ADD ./ /app
+ARG APP_ENV=dev
 COPY ./composer.json ./composer.lock /app/
 RUN mkdir -p var/cache var/sessions public/tmp \
     # Install dependencies
-    && composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest \
-    && composer clear-cache
+    && composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest
+    #&& composer clear-cache
 
 # Add application
-ADD ./ /app
 RUN composer dump-autoload --classmap-authoritative --no-dev \
     # Fixes permissions issues in non-dev mode
     && chown -R www-data . var/cache var/sessions public/tmp

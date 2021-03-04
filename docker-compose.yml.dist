@@ -31,6 +31,17 @@ services:
         volumes:
             - "./docker/mysql:/var/lib/mysql"
         restart: "no"
+
     mailer:
         build: ./docker/mail
         restart: "no"
+
+    phpmyadmin:
+         image: phpmyadmin/phpmyadmin:5.0.1
+         restart: always
+         environment:
+           PMA_HOST: database
+           PMA_USER: jeyser
+           PMA_PASSWORD: jeyser
+         ports:
+           - "5000:80"
